@@ -2,10 +2,6 @@ package com.electrostoresystem.clientphone.infrastructure.clientphoneui;
 
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -73,13 +69,16 @@ public class CreateClientPhoneUi extends JFrame {
         addComponent(jLabel1, 0, 0, 2);
         addComponent(new JLabel("Client ID:"), 1, 0);
         addComponent(jTextField1, 1, 1);
+        addComponent(new JLabel("Phone Number:"), 2, 0);
+        addComponent(jTextField2, 2, 1);
+
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(jButton2);
         buttonPanel.add(jButton1);
         buttonPanel.add(jButton3);
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = 3;
         gbc.gridwidth = 2;
         add(buttonPanel, gbc);
 
@@ -108,7 +107,7 @@ public class CreateClientPhoneUi extends JFrame {
 
 
             createClientPhoneUseCase.execute(clientPhone); // Corrected from "customer" to "clientPhone"
-            JOptionPane.showMessageDialog(this, "ClientPhone added successfully!");
+           
             resetFields();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -117,6 +116,7 @@ public class CreateClientPhoneUi extends JFrame {
 
     private void resetFields() {
         jTextField1.setText("");
+        jTextField2.setText("");
 
     }
 }

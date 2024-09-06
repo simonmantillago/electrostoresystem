@@ -10,7 +10,7 @@ public class UpdateClientPhoneUseCase {
         this.clientPhoneService = clientPhoneService;
     }
 
-    public void execute(ClientPhone clientPhone){
-        clientPhoneService.updateClientPhone(clientPhone);
+    public void execute(ClientPhone clientPhone, String phone){
+        clientPhoneService.updateClientPhone(clientPhone,phone);
     }
 }

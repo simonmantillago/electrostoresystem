@@ -2,18 +2,12 @@ package com.electrostoresystem.clientphone.infrastructure.clientphoneui;
 
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.List;
 import java.util.Optional;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -22,7 +16,6 @@ import javax.swing.WindowConstants;
 
 import com.electrostoresystem.clientphone.application.FindAllClientPhoneUseCase;
 import com.electrostoresystem.clientphone.application.FindClientPhoneByPhoneUseCase;
-import com.electrostoresystem.clientphone.application.FindClientPhonesByClientIdUseCase;
 import com.electrostoresystem.clientphone.application.UpdateClientPhoneUseCase;
 import com.electrostoresystem.clientphone.domain.entity.ClientPhone;
 import com.electrostoresystem.clientphone.domain.service.ClientPhoneService;
@@ -45,7 +38,7 @@ public class UpdateClientPhoneUi extends JFrame {
     private JButton jButton2; // Save
     private JButton jButton3; // Go back
     private JButton jButton4; // Find
-    private String foundId;
+    private String foundPhone;
 
     public UpdateClientPhoneUi(UpdateClientPhoneUseCase updateClientPhoneUseCase, FindClientPhoneByPhoneUseCase findClientPhoneByPhoneUseCase, ClientPhoneUiController clientPhoneUiController) {
         this.updateClientPhoneUseCase = updateClientPhoneUseCase;
@@ -57,13 +50,12 @@ public class UpdateClientPhoneUi extends JFrame {
         ClientPhoneService clientPhoneService = new ClientPhoneRepository();
         FindAllClientPhoneUseCase findAllClientPhoneUseCase = new FindAllClientPhoneUseCase(clientPhoneService);
         initComponents(findAllClientPhoneUseCase);
-        reloadComboBoxOptions();
         setVisible(true);
     }
 
     private void initComponents(FindAllClientPhoneUseCase findAllClientPhoneUseCase) {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Update ClientPhone");
+        setTitle("Update Client Phone");
         setSize(500, 500);
 
         // Establecer el layout antes de agregar componentes
@@ -98,10 +90,10 @@ public class UpdateClientPhoneUi extends JFrame {
         addComponent(new JLabel("Phone Number:"), 1, 0);
         addComponent(jTextField1, 1, 1);
         addComponent(jButton4, 2, 0, 2);
-        addComponent(new JLabel("Phone Number:"), 3, 0);
+        addComponent(new JLabel("Client Id:"), 3, 0);
         addComponent(jTextField2, 3, 1);
-        addComponent(new JLabel("Client Id:"), 4, 0);
-        addComponent(jTextField2, 4, 1);
+        addComponent(new JLabel("Phone Number:"), 4, 0);
+        addComponent(jTextField3, 4, 1);
         
 
         // Panel de botones
@@ -122,28 +114,26 @@ public class UpdateClientPhoneUi extends JFrame {
 
     private void addComponent(Component component, int row, int col, int width) {
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = col;  // La columna en la que se agregará el componente
-        gbc.gridy = row;  // La fila en la que se agregará el componente
-        gbc.gridwidth = width;  // Número de celdas de ancho que ocupará el componente
-        gbc.fill = GridBagConstraints.HORIZONTAL;  // El componente se estirará horizontalmente
-        gbc.insets = new Insets(5, 5, 5, 5);  // Márgenes alrededor del componente
-        gbc.anchor = GridBagConstraints.CENTER; // Centro del componente
+        gbc.gridx = col;  
+        gbc.gridy = row;  
+        gbc.gridwidth = width;  
+        gbc.fill = GridBagConstraints.HORIZONTAL;  
+        gbc.insets = new Insets(5, 5, 5, 5);  
+        gbc.anchor = GridBagConstraints.CENTER; 
 
-        add(component, gbc);  // Añade el componente con las restricciones especificadas
+        add(component, gbc);  
     }
 
     private void updateClientPhone() {
         try {
             ClientPhone clientPhone = new ClientPhone();
-            clientPhone.setPhone(jTextField2.getText());
-            clientPhone.setClientId(jTextField3.getText());
-    
-            updateClientPhoneUseCase.execute(clientPhone);
-            JOptionPane.showMessageDialog(this, "ClientPhone updated successfully!");
+            clientPhone.setClientId(jTextField2.getText()); 
+            clientPhone.setPhone(jTextField3.getText());  
+        
+            updateClientPhoneUseCase.execute(clientPhone,foundPhone);  
             resetFields();
         } catch (Exception ex) {
-            // Imprime el mensaje de error completo en la consola
-            ex.printStackTrace();
+            ex.printStackTrace();  
             JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -154,16 +144,17 @@ public class UpdateClientPhoneUi extends JFrame {
     
         if (clientPhoneToUpdate.isPresent()) {
             ClientPhone foundClientPhone = clientPhoneToUpdate.get();
-            foundId = foundClientPhone.getPhone();  // Asignar el ID encontrado
-            jTextField2.setText(foundClientPhone.getPhone());  // Mostrar el número de teléfono en el campo correspondiente
-            jTextField3.setText(foundClientPhone.getClientId());  // Mostrar el client_id en el campo correspondiente
-            showComponents();  // Mostrar los campos y botones relevantes
-            revalidate();  // Asegurar que el layout se actualice
-            repaint();  // Redibujar la ventana
+            foundPhone = phoneToUpdate;  
+            jTextField2.setText(foundClientPhone.getClientId());  
+            jTextField3.setText(foundClientPhone.getPhone());  
+            showComponents(); 
+            revalidate();  
+            repaint();  
         } else {
             JOptionPane.showMessageDialog(this, "ClientPhone not found!", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
 
     private void resetFields() {
         jTextField2.setText("");
@@ -175,11 +166,13 @@ public class UpdateClientPhoneUi extends JFrame {
     private void hideComponents() {
         jTextField2.setVisible(false);
         jTextField3.setVisible(false);
+        jTextField1.setEditable(true);
         jButton1.setVisible(false);
         jButton2.setVisible(false);
     }
 
     private void showComponents() {
+        jTextField1.setEditable(false);
         jTextField2.setVisible(true);
         jTextField3.setVisible(true);
         jButton1.setVisible(true);

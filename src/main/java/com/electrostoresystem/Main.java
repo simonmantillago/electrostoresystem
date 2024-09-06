@@ -1,7 +1,14 @@
 package com.electrostoresystem;
 
+import javax.swing.SwingUtilities;
+
+import com.electrostoresystem.uicontroller.infrastructure.CrudUiController;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        SwingUtilities.invokeLater(() -> {
+            CrudUiController.createAndShowMainUI();; 
+ 
+        });
     }
 }

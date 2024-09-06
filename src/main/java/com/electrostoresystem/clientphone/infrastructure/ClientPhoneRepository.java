@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
-import javax.management.relation.Role;
+import javax.swing.JOptionPane;
 
 import com.electrostoresystem.clientphone.domain.entity.ClientPhone;
 import com.electrostoresystem.clientphone.domain.service.ClientPhoneService;
@@ -42,30 +42,38 @@ private Connection connection;
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("clientPhone added successfully!");
+                JOptionPane.showMessageDialog(null, "ClientPhone added successfully!");
             } else {
                 System.out.println("clientPhone addition failed!");
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error, Wrong Id or client not Registered!");
         }
     }
 
     @Override
-    public void updateClientPhone(ClientPhone clientPhone) {
+    public void updateClientPhone(ClientPhone clientPhone,String originalPhone) {
         String query = "UPDATE client_phones SET phone = ?, client_id = ? WHERE phone = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setString(1, clientPhone.getPhone());
             ps.setString(2, clientPhone.getClientId());
-            ps.setString(3, clientPhone.getPhone());
+            ps.setString(3, originalPhone);
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {     
                 System.out.println("ClientPhone updated successfully!");
+                JOptionPane.showMessageDialog(null, "ClientPhone updated successfully!");
             } else {  
                 System.out.println("ClientPhone update failed!");
+                JOptionPane.showMessageDialog(null, "ClientPhone update failed!");
+
+                
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "ClientPhone update failed!");
+            
         }
     }
 
@@ -83,9 +91,9 @@ private Connection connection;
             try (ResultSet rs = selectPs.executeQuery()) {
                 if (rs.next()) {
                     clientPhone = new ClientPhone(
-                        rs.getNString("phone"),
-                        rs.getString("client_id")
-                    );
+                        rs.getString("client_id"),
+                        rs.getNString("phone")
+                        );
                 }
             }
 
@@ -142,8 +150,8 @@ private Connection connection;
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     ClientPhone clientPhone = new ClientPhone(
-                        rs.getString("phone"),
-                        rs.getString("client_id")
+                        rs.getString("client_id"),
+                        rs.getString("phone")
                     );
                     clientPhones.add(clientPhone);
                 }
@@ -163,8 +171,8 @@ private Connection connection;
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
                         ClientPhone clientPhone = new ClientPhone(
-                            rs.getString("phone"),
-                            rs.getString("client_id")
+                            rs.getString("client_id"),
+                            rs.getString("phone")
                         );
                         return Optional.of(clientPhone);
                     }
