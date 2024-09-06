@@ -5,11 +5,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
-
+import javax.management.relation.Role;
 
 import com.electrostoresystem.clientphone.domain.entity.ClientPhone;
 import com.electrostoresystem.clientphone.domain.service.ClientPhoneService;
@@ -106,15 +107,71 @@ private Connection connection;
         }
     }
 
-    @Override
-    public Optional<ClientPhone> findClientPhoneByPhone(String ClientPhoneId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findClientPhoneById'");
-    }
+
 
     @Override
     public List<ClientPhone> findAllClientPhone() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findAllClientPhone'");
+        List<ClientPhone> clientPhones = new ArrayList<>();
+        String query = "SELECT phone,client_id FROM client_phones";
+        
+        try (PreparedStatement ps = connection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery()) {
+            
+            while (rs.next()) {
+                ClientPhone clientPhone = new ClientPhone(
+                    rs.getString("phone"),
+                    rs.getString("client_id")
+                );
+                clientPhones.add(clientPhone);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return clientPhones;
+    }
+
+    @Override
+    public List<ClientPhone> findClientPhonesByClientId(String clientId) {
+        List<ClientPhone> clientPhones = new ArrayList<>();
+        String query = "SELECT phone, client_id FROM client_phones WHERE client_id = ?";
+        
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, clientId);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    ClientPhone clientPhone = new ClientPhone(
+                        rs.getString("phone"),
+                        rs.getString("client_id")
+                    );
+                    clientPhones.add(clientPhone);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return clientPhones;
+    }
+
+    @Override
+    public Optional<ClientPhone> findClientPhoneByPhone(String Phone) {
+            String query = "SELECT phone,client_id FROM client_phones WHERE phone = ?";
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setString(1, Phone);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        ClientPhone clientPhone = new ClientPhone(
+                            rs.getString("phone"),
+                            rs.getString("client_id")
+                        );
+                        return Optional.of(clientPhone);
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return Optional.empty();
     }
 }

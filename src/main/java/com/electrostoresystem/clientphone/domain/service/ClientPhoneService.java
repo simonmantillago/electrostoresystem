@@ -5,6 +5,7 @@ import java.util.Optional;
 
 
 
+
 import com.electrostoresystem.clientphone.domain.entity.ClientPhone;
 
 public interface ClientPhoneService {
@@ -13,4 +14,5 @@ public interface ClientPhoneService {
     ClientPhone deleteClientPhone (String Phone);
     Optional<ClientPhone> findClientPhoneByPhone(String Phone);
     List<ClientPhone> findAllClientPhone();
+    List<ClientPhone> findClientPhonesByClientId(String clientId);
 }
