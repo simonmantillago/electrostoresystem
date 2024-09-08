@@ -31,13 +31,13 @@ public class UpdateClientPhoneUi extends JFrame {
 
     
     
-    private JTextField jTextField1; // ClientPhone Name
-    private JTextField jTextField2; // ClientPhone Name
-    private JTextField jTextField3; // ClientPhone Name
-    private JButton jButton1; // Reset
-    private JButton jButton2; // Save
-    private JButton jButton3; // Go back
-    private JButton jButton4; // Find
+    private JTextField jTextField1; 
+    private JTextField jTextField2; 
+    private JTextField jTextField3; 
+    private JButton jButton1; 
+    private JButton jButton2; 
+    private JButton jButton3; 
+    private JButton jButton4; 
     private String foundPhone;
 
     public UpdateClientPhoneUi(UpdateClientPhoneUseCase updateClientPhoneUseCase, FindClientPhoneByPhoneUseCase findClientPhoneByPhoneUseCase, ClientPhoneUiController clientPhoneUiController) {

@@ -57,29 +57,29 @@ public class DeleteClientPhoneUi extends JFrame {
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         addComponent(titleLabel, 0, 1);
     
-        // Etiqueta de Client Id
+  
         JLabel lblId = new JLabel("Client Id:");
         addComponent(lblId, 1, 0);
     
-        // Campo de texto para Client Id
+       
         idTxtBox = new JTextField();
-        addComponent(idTxtBox, 1, 1);  // Corrige la adición de idTxtBox en vez de titleLabel
+        addComponent(idTxtBox, 1, 1);  
     
-        // Botón para buscar los teléfonos
+      
         JButton findPhonesBtn = new JButton("Find");
         findPhonesBtn.addActionListener(e -> findPhonesComboBox());
-        addComponent(findPhonesBtn, 1, 2);  // Colocar el botón en la columna 2
+        addComponent(findPhonesBtn, 1, 2);
     
-        // ComboBox para mostrar los teléfonos asociados al Client Id
+        
         clientPhoneOptions = new JComboBox<>();
-        addComponent(clientPhoneOptions, 2, 1, 1);  // Abarcar dos columnas
+        addComponent(clientPhoneOptions, 2, 1, 1); 
     
-        // Botón para eliminar el teléfono seleccionado
+
         JButton btnDelete = new JButton("Delete");
         btnDelete.addActionListener(e -> deleteClientPhone());
         addComponent(btnDelete, 3, 1, 1);
     
-        // Área de resultados para mostrar mensajes de éxito o error
+   
         resultArea = new JTextArea(10, 30);
         resultArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(resultArea);
@@ -145,10 +145,8 @@ public class DeleteClientPhoneUi extends JFrame {
         try {
             String clientId = clientIdText.trim();
     
-            // Buscar los teléfonos asociados al clientId
             List<ClientPhone> clientPhones = findClientPhonesByClientIdUseCase.execute(clientId);
     
-            // Limpiar las opciones anteriores del JComboBox
             clientPhoneOptions.removeAllItems();
     
             if (!clientPhones.isEmpty()) {

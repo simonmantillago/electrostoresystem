@@ -20,11 +20,11 @@ public class CreateClientPhoneUi extends JFrame {
     private final CreateClientPhoneUseCase createClientPhoneUseCase;
     private final ClientPhoneUiController clientPhoneUiController; 
 
-    private JTextField jTextField1; // ClientPhone Code
-    private JTextField jTextField2; // ClientPhone Code
-    private JButton jButton1; // Reset
-    private JButton jButton2; // Save
-    private JButton jButton3; // Go back
+    private JTextField jTextField1; 
+    private JTextField jTextField2; 
+    private JButton jButton1; 
+    private JButton jButton2; 
+    private JButton jButton3; 
 
     public CreateClientPhoneUi(CreateClientPhoneUseCase createClientPhoneUseCase, ClientPhoneUiController clientPhoneUiController) { 
         this.createClientPhoneUseCase = createClientPhoneUseCase;
@@ -106,7 +106,7 @@ public class CreateClientPhoneUi extends JFrame {
             clientPhone.setPhone(jTextField2.getText());
 
 
-            createClientPhoneUseCase.execute(clientPhone); // Corrected from "customer" to "clientPhone"
+            createClientPhoneUseCase.execute(clientPhone); 
            
             resetFields();
         } catch (Exception ex) {

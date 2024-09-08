@@ -48,35 +48,32 @@ public class FindClientPhonesByClientIdUi extends JFrame {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
     
-        // Título
+      
         JLabel titleLabel = new JLabel("Search Phones");
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         addComponent(titleLabel, 0, 1, 1);
     
-        // Etiqueta de Client Id
+       
         JLabel lblId = new JLabel("Client Id:");
         addComponent(lblId, 1, 0);
     
-        // Campo de texto para Client Id
+        
         idTxtBox = new JTextField();
-        addComponent(idTxtBox, 1, 1);  // Corrige la adición de idTxtBox en vez de titleLabel
+        addComponent(idTxtBox, 1, 1); 
     
-        // Botón para buscar los teléfonos
+     
         JButton findPhonesBtn = new JButton("Find");
         findPhonesBtn.addActionListener(e -> findPhonesComboBox());
-        addComponent(findPhonesBtn, 1, 2);  // Colocar el botón en la columna 2
+        addComponent(findPhonesBtn, 1, 2);  
     
         JLabel lblphones = new JLabel("Related Phones:");
         addComponent(lblphones, 2, 0);
-        // ComboBox para mostrar los teléfonos asociados al Client Id
+   
         clientPhoneOptions = new JComboBox<>();
-        addComponent(clientPhoneOptions, 2, 1, 2);  // Abarcar dos columnas
+        addComponent(clientPhoneOptions, 2, 1, 2);  
         clientPhoneOptions.setVisible(false);
     
-
-    
-        // Botón para cerrar la ventana
         JButton btnClose = new JButton("Close");
         btnClose.addActionListener(e -> {
             dispose();
@@ -117,8 +114,7 @@ public class FindClientPhonesByClientIdUi extends JFrame {
     
             // Buscar los teléfonos asociados al clientId
             List<ClientPhone> clientPhones = findClientPhonesByClientIdUseCase.execute(clientId);
-    
-            // Limpiar las opciones anteriores del JComboBox
+
             clientPhoneOptions.removeAllItems();
     
             if (!clientPhones.isEmpty()) {

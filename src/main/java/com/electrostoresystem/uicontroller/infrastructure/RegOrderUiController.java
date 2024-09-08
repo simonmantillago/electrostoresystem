@@ -1,5 +1,5 @@
 package com.electrostoresystem.uicontroller.infrastructure;
 
-public class RegOrderController {
+public class RegOrderUiController {
 
 }
