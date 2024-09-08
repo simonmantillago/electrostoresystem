@@ -95,6 +95,14 @@ import com.electrostoresystem.category.infrastructure.categoryui.CategoryUiContr
 import com.electrostoresystem.category.domain.service.CategoryService;
 import com.electrostoresystem.category.infrastructure.CategoryRepository;
 
+import com.electrostoresystem.city.application.CreateCityUseCase;
+import com.electrostoresystem.city.application.DeleteCityUseCase;
+import com.electrostoresystem.city.application.FindCityByIdUseCase;
+import com.electrostoresystem.city.application.UpdateCityUseCase;
+import com.electrostoresystem.city.infrastructure.cityui.CityUiController;
+import com.electrostoresystem.city.domain.service.CityService;
+import com.electrostoresystem.city.infrastructure.CityRepository;
+
 import com.electrostoresystem.brand.application.CreateBrandUseCase;
 import com.electrostoresystem.brand.application.DeleteBrandUseCase;
 import com.electrostoresystem.brand.application.FindBrandByIdUseCase;
@@ -111,7 +119,7 @@ public class CrudUiController{
     public static void createAndShowMainUI() {
         JFrame frame = new JFrame("Survey Management");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(300, 600);
+        frame.setSize(300, 800);
         frame.setLocationRelativeTo(null);
 
         JPanel mainPanel = new JPanel();
@@ -234,7 +242,16 @@ public class CrudUiController{
 
         buttonPanel.add(btnRegions);
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+        
+        JButton btnCities = createStyledButton("Cities", buttonSize, buttonFont);
+        btnCities.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnCities.addActionListener(e -> {
+            frame.setVisible(false);
+            openCityUiController();
+        });
 
+        buttonPanel.add(btnCities);
+        buttonPanel.add(Box.createRigidArea(new Dimension(0, 15)));
         
 
         
@@ -382,7 +399,19 @@ public class CrudUiController{
         RegionUiController regionUiController = new RegionUiController(createRegionUseCase, findRegionByIdUseCase, updateRegionUseCase, deleteRegionUseCase);
         regionUiController.showCrudOptions();
     }
+    
+    private static void openCityUiController() {
+        CityService cityService = new CityRepository();
 
+        CreateCityUseCase createCityUseCase = new CreateCityUseCase(cityService);
+        FindCityByIdUseCase findCityByIdUseCase = new FindCityByIdUseCase(cityService);
+        UpdateCityUseCase updateCityUseCase = new UpdateCityUseCase(cityService);
+        DeleteCityUseCase deleteCityUseCase = new DeleteCityUseCase(cityService);
+
+        CityUiController cityUiController = new CityUiController(createCityUseCase, findCityByIdUseCase, updateCityUseCase, deleteCityUseCase);
+        cityUiController.showCrudOptions();
+    }
+    
     private static JButton createStyledButton(String text, Dimension size, Font font) {
         JButton button = new JButton(text);
         button.setPreferredSize(size);
