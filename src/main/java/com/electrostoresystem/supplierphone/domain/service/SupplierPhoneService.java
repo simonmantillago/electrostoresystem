@@ -15,4 +15,5 @@ public interface SupplierPhoneService {
     Optional<SupplierPhone> findSupplierPhoneByPhone(String Phone);
     List<SupplierPhone> findAllSupplierPhone();
     List<SupplierPhone> findSupplierPhonesBySupplierId(String supplierId);
+    void deleteSupplierPhonesBySupplierId(String supplierId);
 }

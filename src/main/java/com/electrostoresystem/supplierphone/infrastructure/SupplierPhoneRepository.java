@@ -182,4 +182,21 @@ private Connection connection;
             }
             return Optional.empty();
     }
+
+    @Override
+    public void deleteSupplierPhonesBySupplierId(String supplierId) {
+        String deleteQuery = "DELETE FROM supplier_phones WHERE supplier_id = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(deleteQuery)) {
+            ps.setString(1, supplierId);
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("SupplierPhones deleted successfully!");
+            } else {
+                System.out.println("No SupplierPhones found for the given supplier_id.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

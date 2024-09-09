@@ -63,6 +63,15 @@ import com.electrostoresystem.salestatus.infrastructure.salestatusui.SaleStatusU
 import com.electrostoresystem.salestatus.domain.service.SaleStatusService;
 import com.electrostoresystem.salestatus.infrastructure.SaleStatusRepository;
 
+import com.electrostoresystem.supplier.application.CreateSupplierUseCase;
+import com.electrostoresystem.supplier.application.DeleteSupplierUseCase;
+import com.electrostoresystem.supplier.application.FindAllSupplierUseCase;
+import com.electrostoresystem.supplier.application.FindSupplierByIdUseCase;
+import com.electrostoresystem.supplier.application.UpdateSupplierUseCase;
+import com.electrostoresystem.supplier.infrastructure.supplierui.SupplierUiController;
+import com.electrostoresystem.supplier.domain.service.SupplierService;
+import com.electrostoresystem.supplier.infrastructure.SupplierRepository;
+
 import com.electrostoresystem.paymentmethods.application.CreatePaymentMethodsUseCase;
 import com.electrostoresystem.paymentmethods.application.DeletePaymentMethodsUseCase;
 import com.electrostoresystem.paymentmethods.application.FindPaymentMethodsByIdUseCase;
@@ -271,6 +280,16 @@ public class CrudUiController{
 
         buttonPanel.add(btnClients);
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+
+        JButton btnSuppliers = createStyledButton("Suppliers", buttonSize, buttonFont);
+        btnSuppliers.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnSuppliers.addActionListener(e -> {
+            frame.setVisible(false);
+            openSupplierUiController();
+        });
+
+        buttonPanel.add(btnSuppliers);
+        buttonPanel.add(Box.createRigidArea(new Dimension(0, 15)));
         
 
         
@@ -444,6 +463,21 @@ public class CrudUiController{
 
         ClientUiController clientUiController = new ClientUiController(createClientUseCase, findClientByIdUseCase, updateClientUseCase, deleteClientUseCase, findAllClientUseCase);
         clientUiController.showCrudOptions();
+    }
+
+    private static void openSupplierUiController() {
+        SupplierService supplierService = new SupplierRepository();
+
+        CreateSupplierUseCase createSupplierUseCase = new CreateSupplierUseCase(supplierService);
+        FindSupplierByIdUseCase findSupplierByIdUseCase = new FindSupplierByIdUseCase(supplierService);
+        UpdateSupplierUseCase updateSupplierUseCase = new UpdateSupplierUseCase(supplierService);
+        DeleteSupplierUseCase deleteSupplierUseCase = new DeleteSupplierUseCase(supplierService);
+        FindAllSupplierUseCase findAllSupplierUseCase = new FindAllSupplierUseCase(supplierService);
+
+
+
+        SupplierUiController supplierUiController = new SupplierUiController(createSupplierUseCase, findSupplierByIdUseCase, updateSupplierUseCase, deleteSupplierUseCase, findAllSupplierUseCase);
+        supplierUiController.showCrudOptions();
     }
 
     
