@@ -146,7 +146,6 @@ public class UpdateCityUi extends JFrame {
             city.setName(cityNameField.getText());
             city.setRegionId(Integer.parseInt(textBeforeDot(updateRegionBox.getSelectedItem().toString())));
             updateCityUseCase.execute(city);
-            JOptionPane.showMessageDialog(this, "City updated successfully!");
             reloadComboBoxOptions();
             resetFields();
         } catch (Exception ex) {
@@ -220,7 +219,7 @@ public class UpdateCityUi extends JFrame {
                     cityBox.addItem(cityItem.getId() + ". " + cityItem.getName());
                 }
             }
-        }catch(Exception e){
+        }catch(Exception e){    
 
         }
     }

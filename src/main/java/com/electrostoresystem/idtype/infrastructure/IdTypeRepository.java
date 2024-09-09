@@ -33,7 +33,7 @@ public class IdTypeRepository implements IdTypeService{
     @Override
     public void createIdType(IdType idType) {
         try {
-            String query = "INSERT INTO client_types (name) VALUES (?)";
+            String query = "INSERT INTO id_types (name) VALUES (?)";
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, idType.getName());
             int rowsAffected = ps.executeUpdate();
@@ -50,7 +50,7 @@ public class IdTypeRepository implements IdTypeService{
 
     @Override
     public void updateIdType(IdType idType) {
-        String query = "UPDATE client_types SET name = ? WHERE id = ?";
+        String query = "UPDATE id_types SET name = ? WHERE id = ?";
         try(PreparedStatement ps = connection.prepareStatement(query)){
             ps.setString(1, idType.getName());
             ps.setInt(2, idType.getId());
@@ -69,8 +69,8 @@ public class IdTypeRepository implements IdTypeService{
 @Override
     public IdType deleteIdType(int id) {
         IdType idType = null;
-        String selectQuery = "SELECT * FROM client_types WHERE id = ?";
-        String deleteQuery = "DELETE FROM client_types WHERE id = ?";
+        String selectQuery = "SELECT * FROM id_types WHERE id = ?";
+        String deleteQuery = "DELETE FROM id_types WHERE id = ?";
         
         try (PreparedStatement selectPs = connection.prepareStatement(selectQuery);
             PreparedStatement deletePs = connection.prepareStatement(deleteQuery)) {
@@ -106,7 +106,7 @@ public class IdTypeRepository implements IdTypeService{
 
     @Override
     public Optional<IdType> findIdTypeById(int id) {
-        String query = "SELECT id,name FROM client_types WHERE id = ?";
+        String query = "SELECT id,name FROM id_types WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, id);
             try(ResultSet rs = ps.executeQuery()){
@@ -127,7 +127,7 @@ public class IdTypeRepository implements IdTypeService{
 
     @Override
     public Optional<IdType> findIdTypeByName(String name) {
-        String query = "SELECT id,name FROM client_types WHERE name = ?";
+        String query = "SELECT id,name FROM id_types WHERE name = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setString(1, name);
             try(ResultSet rs = ps.executeQuery()){
@@ -150,7 +150,7 @@ public class IdTypeRepository implements IdTypeService{
     @Override
     public List<IdType> findAllIdType() {
         List<IdType> idTypes = new ArrayList<>();
-        String query = "SELECT id,name FROM client_types";
+        String query = "SELECT id,name FROM id_types";
         
         try (PreparedStatement ps = connection.prepareStatement(query);
             ResultSet rs = ps.executeQuery()) {

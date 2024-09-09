@@ -103,6 +103,15 @@ import com.electrostoresystem.city.infrastructure.cityui.CityUiController;
 import com.electrostoresystem.city.domain.service.CityService;
 import com.electrostoresystem.city.infrastructure.CityRepository;
 
+import com.electrostoresystem.client.application.CreateClientUseCase;
+import com.electrostoresystem.client.application.DeleteClientUseCase;
+import com.electrostoresystem.client.application.FindAllClientUseCase;
+import com.electrostoresystem.client.application.FindClientByIdUseCase;
+import com.electrostoresystem.client.application.UpdateClientUseCase;
+import com.electrostoresystem.client.infrastructure.clientui.ClientUiController;
+import com.electrostoresystem.client.domain.service.ClientService;
+import com.electrostoresystem.client.infrastructure.ClientRepository;
+
 import com.electrostoresystem.brand.application.CreateBrandUseCase;
 import com.electrostoresystem.brand.application.DeleteBrandUseCase;
 import com.electrostoresystem.brand.application.FindBrandByIdUseCase;
@@ -251,6 +260,16 @@ public class CrudUiController{
         });
 
         buttonPanel.add(btnCities);
+        buttonPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+
+        JButton btnClients = createStyledButton("Clients", buttonSize, buttonFont);
+        btnClients.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnClients.addActionListener(e -> {
+            frame.setVisible(false);
+            openClientUiController();
+        });
+
+        buttonPanel.add(btnClients);
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 15)));
         
 
@@ -411,6 +430,22 @@ public class CrudUiController{
         CityUiController cityUiController = new CityUiController(createCityUseCase, findCityByIdUseCase, updateCityUseCase, deleteCityUseCase);
         cityUiController.showCrudOptions();
     }
+
+    private static void openClientUiController() {
+        ClientService clientService = new ClientRepository();
+
+        CreateClientUseCase createClientUseCase = new CreateClientUseCase(clientService);
+        FindClientByIdUseCase findClientByIdUseCase = new FindClientByIdUseCase(clientService);
+        UpdateClientUseCase updateClientUseCase = new UpdateClientUseCase(clientService);
+        DeleteClientUseCase deleteClientUseCase = new DeleteClientUseCase(clientService);
+        FindAllClientUseCase findAllClientUseCase = new FindAllClientUseCase(clientService);
+
+
+
+        ClientUiController clientUiController = new ClientUiController(createClientUseCase, findClientByIdUseCase, updateClientUseCase, deleteClientUseCase, findAllClientUseCase);
+        clientUiController.showCrudOptions();
+    }
+
     
     private static JButton createStyledButton(String text, Dimension size, Font font) {
         JButton button = new JButton(text);

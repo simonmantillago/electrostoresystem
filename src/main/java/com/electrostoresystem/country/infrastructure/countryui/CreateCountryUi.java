@@ -1,18 +1,18 @@
 package com.electrostoresystem.country.infrastructure.countryui;
 
-import java.awt.Component;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+    import java.awt.Component;
+    import java.awt.Font;
+    import java.awt.GridBagConstraints;
+    import java.awt.GridBagLayout;
+    import java.awt.Insets;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+    import javax.swing.JButton;
+    import javax.swing.JFrame;
+    import javax.swing.JLabel;
+    import javax.swing.JOptionPane;
+    import javax.swing.JPanel;
+    import javax.swing.JTextField;
+    import javax.swing.SwingConstants;
 
 import com.electrostoresystem.country.application.CreateCountryUseCase;
 import com.electrostoresystem.country.domain.entity.Country;
@@ -47,6 +47,7 @@ public class CreateCountryUi extends JFrame {
 
         jTextField1 = new JTextField();
 
+        
 
         jButton1 = new JButton("Reset");
         jButton2 = new JButton("Save");

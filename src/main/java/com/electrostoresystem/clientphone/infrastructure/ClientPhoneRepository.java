@@ -42,13 +42,13 @@ private Connection connection;
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("clientPhone added successfully!");
-                JOptionPane.showMessageDialog(null, "ClientPhone added successfully!");
+                // JOptionPane.showMessageDialog(null, "ClientPhone added successfully!");
             } else {
                 System.out.println("clientPhone addition failed!");
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error, Wrong Id or client not Registered!");
+            // JOptionPane.showMessageDialog(null, "Error, Wrong Id or client not Registered!");
         }
     }
 
@@ -181,5 +181,22 @@ private Connection connection;
                 e.printStackTrace();
             }
             return Optional.empty();
+    }
+
+    @Override
+    public void deleteClientPhonesByClientId(String clientId) {
+        String deleteQuery = "DELETE FROM client_phones WHERE client_id = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(deleteQuery)) {
+            ps.setString(1, clientId);
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("ClientPhones deleted successfully!");
+            } else {
+                System.out.println("No ClientPhones found for the given client_id.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

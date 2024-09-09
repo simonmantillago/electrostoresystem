@@ -12,6 +12,7 @@ public interface ClientPhoneService {
     void createClientPhone (ClientPhone clientPhone);
     void updateClientPhone (ClientPhone clientPhone, String originalPhone);
     ClientPhone deleteClientPhone (String Phone);
+    void deleteClientPhonesByClientId(String clientId);
     Optional<ClientPhone> findClientPhoneByPhone(String Phone);
     List<ClientPhone> findAllClientPhone();
     List<ClientPhone> findClientPhonesByClientId(String clientId);
