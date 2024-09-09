@@ -6,7 +6,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.List;
-import java.util.Optional;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -36,8 +35,7 @@ public class CreateProductUi  extends JFrame{
 
     private JTextField nameTxt, descriptionTxt,salePriceTxt, minStockTxt;
     private JComboBox<String> brandBox, categoryBox;
-    private int regionId,countryId;
-    private String regionName, countryName;
+
 
 
     private JButton jButton1; // Reset

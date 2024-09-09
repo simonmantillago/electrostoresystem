@@ -130,28 +130,24 @@ public class DeleteClientUi extends JFrame {
         Optional<ClientType> foundClientType = findClientTypeByIdUseCase.execute(deletedClient.getClientTypeId());
         Optional<City> foundCity = findCityByIdUseCase.execute(deletedClient.getCityId());
 
-        if (deletedClient != null) {
-            String message = String.format(
-                "Client found successfully:\n\n" +
-                "Id: %s\n" +
-                "Name: %s\n" +
-                "Id Type: %s\n" +
-                "Client Type: %s\n"+
-                "Email: %s\n"+
-                "City: %s\n"+
-                "Address: %s\n",
-                deletedClient.getId(),
-                deletedClient.getName(),
-                foundIdType.get().getName(),
-                foundClientType.get().getName(),
-                deletedClient.getEmail(),
-                foundCity.get().getName(),
-                deletedClient.getAddressDetails()
-            );
-            resultArea.setText(message);
-        } else {
-            resultArea.setText("Client deletion failed.");
-        }
+        String message = String.format(
+            "Client found successfully:\n\n" +
+            "Id: %s\n" +
+            "Name: %s\n" +
+            "Id Type: %s\n" +
+            "Client Type: %s\n"+
+            "Email: %s\n"+
+            "City: %s\n"+
+            "Address: %s\n",
+            deletedClient.getId(),
+            deletedClient.getName(),
+            foundIdType.get().getName(),
+            foundClientType.get().getName(),
+            deletedClient.getEmail(),
+            foundCity.get().getName(),
+            deletedClient.getAddressDetails()
+        );
+        resultArea.setText(message);
     }
 }
 

@@ -80,6 +80,15 @@ import com.electrostoresystem.paymentmethods.infrastructure.paymentmethodsui.Pay
 import com.electrostoresystem.paymentmethods.domain.service.PaymentMethodsService;
 import com.electrostoresystem.paymentmethods.infrastructure.PaymentMethodsRepository;
 
+import com.electrostoresystem.product.application.CreateProductUseCase;
+import com.electrostoresystem.product.application.DeleteProductUseCase;
+import com.electrostoresystem.product.application.FindAllProductUseCase;
+import com.electrostoresystem.product.application.FindProductByIdUseCase;
+import com.electrostoresystem.product.application.UpdateProductUseCase;
+import com.electrostoresystem.product.infrastructure.productui.ProductUiController;
+import com.electrostoresystem.product.domain.service.ProductService;
+import com.electrostoresystem.product.infrastructure.ProductRepository;
+
 import com.electrostoresystem.region.application.CreateRegionUseCase;
 import com.electrostoresystem.region.application.DeleteRegionUseCase;
 import com.electrostoresystem.region.application.FindRegionByIdUseCase;
@@ -290,6 +299,16 @@ public class CrudUiController{
 
         buttonPanel.add(btnSuppliers);
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+
+        JButton btnProducts = createStyledButton("Products", buttonSize, buttonFont);
+        btnProducts.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnProducts.addActionListener(e -> {
+            frame.setVisible(false);
+            openProductUiController();
+        });
+
+        buttonPanel.add(btnProducts);
+        buttonPanel.add(Box.createRigidArea(new Dimension(0, 15)));
         
 
         
@@ -478,6 +497,21 @@ public class CrudUiController{
 
         SupplierUiController supplierUiController = new SupplierUiController(createSupplierUseCase, findSupplierByIdUseCase, updateSupplierUseCase, deleteSupplierUseCase, findAllSupplierUseCase);
         supplierUiController.showCrudOptions();
+    }
+    
+    private static void openProductUiController() {
+        ProductService productService = new ProductRepository();
+
+        CreateProductUseCase createProductUseCase = new CreateProductUseCase(productService);
+        FindProductByIdUseCase findProductByIdUseCase = new FindProductByIdUseCase(productService);
+        UpdateProductUseCase updateProductUseCase = new UpdateProductUseCase(productService);
+        DeleteProductUseCase deleteProductUseCase = new DeleteProductUseCase(productService);
+        FindAllProductUseCase findAllProductUseCase = new FindAllProductUseCase(productService);
+
+
+
+        ProductUiController productUiController = new ProductUiController(createProductUseCase, findProductByIdUseCase, updateProductUseCase, deleteProductUseCase, findAllProductUseCase);
+        productUiController.showCrudOptions();
     }
 
     
