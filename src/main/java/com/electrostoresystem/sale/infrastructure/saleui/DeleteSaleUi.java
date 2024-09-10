@@ -20,6 +20,10 @@ import com.electrostoresystem.sale.application.FindAllSaleUseCase;
 import com.electrostoresystem.sale.domain.entity.Sale;
 import com.electrostoresystem.sale.domain.service.SaleService;
 import com.electrostoresystem.sale.infrastructure.SaleRepository;
+import com.electrostoresystem.saledetail.application.DeleteSaleDetailsBySaleIdUseCase;
+import com.electrostoresystem.saledetail.domain.entity.SaleDetail;
+import com.electrostoresystem.saledetail.domain.service.SaleDetailService;
+import com.electrostoresystem.saledetail.infrastructure.SaleDetailRepository;
 import com.electrostoresystem.salestatus.application.FindSaleStatusByIdUseCase;
 import com.electrostoresystem.salestatus.domain.entity.SaleStatus;
 import com.electrostoresystem.salestatus.domain.service.SaleStatusService;
@@ -87,7 +91,7 @@ public class DeleteSaleUi extends JFrame {
         }
         addComponent(saleOptions, 1, 1);
 
-        JLabel lblReminder = new JLabel("Reminder: Delete All the details Related to this sale first");
+        JLabel lblReminder = new JLabel("Reminder: This will delete all the sale details relate to this sale");
         addComponent(lblReminder, 2, 0, 2);
 
         JButton btnDelete = new JButton("Delete");
@@ -133,7 +137,11 @@ public class DeleteSaleUi extends JFrame {
         PaymentMethodsService PaymentMethodsService = new PaymentMethodsRepository();
         FindPaymentMethodsByIdUseCase  findPaymentMethodsByIdUseCase = new FindPaymentMethodsByIdUseCase(PaymentMethodsService);
 
+        SaleDetailService saleDetailService = new SaleDetailRepository();
+        DeleteSaleDetailsBySaleIdUseCase  deleteSaleDetailsBySaleIdUseCase = new DeleteSaleDetailsBySaleIdUseCase(saleDetailService);
+
         int saleCode = (Integer.parseInt(textBeforeDot(saleOptions.getSelectedItem().toString())));
+        deleteSaleDetailsBySaleIdUseCase.execute(saleCode);
         Sale deletedSale = deleteSaleUseCase.execute(saleCode);
 
         Optional<SaleStatus> foundSaleStatus = findSaleStatusByIdUseCase.execute(deletedSale.getStatusId());
