@@ -172,7 +172,6 @@ public class CrudUiController{
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         
-        // Título superior
         JLabel titleLabel = new JLabel("Database Management", JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         mainPanel.add(titleLabel, BorderLayout.NORTH);
@@ -186,7 +185,7 @@ public class CrudUiController{
         Dimension buttonSize = new Dimension(200, 70);
         Font buttonFont = new Font("Arial", Font.BOLD, 16);
         
-        // Primera columna (izquierda) - 6 botones
+        // Primera columna
         gbc.gridx = 0;
         gbc.gridy = 0;
         
@@ -232,7 +231,7 @@ public class CrudUiController{
         
         
         
-        // Segunda columna (centro) - 7 botones
+        // Segunda columna 
         gbc.gridx = 1;
         gbc.gridy = 0;
         JButton btnCountries = createStyledButton("Countries", buttonSize, buttonFont);
@@ -281,7 +280,7 @@ public class CrudUiController{
         btnSaleStatus.addActionListener(e -> {
             frame.setVisible(false);
             openSaleStatusUiController();
-        });
+        }); 
         buttonPanel.add(btnSaleStatus, gbc);
 
         gbc.gridy++;
@@ -293,7 +292,7 @@ public class CrudUiController{
         buttonPanel.add(btnOrderStatus, gbc);
         
         
-        // Tercera columna (derecha) - 6 botones
+        // Tercera columna 
         gbc.gridx = 2;
         gbc.gridy = 0;
         JButton btnSuppliers = createStyledButton("Suppliers", buttonSize, buttonFont);
