@@ -1,15 +1,19 @@
 package com.electrostoresystem.uicontroller.infrastructure;
 
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.BorderFactory;
 
 import com.electrostoresystem.clientphone.domain.service.ClientPhoneService;
 import com.electrostoresystem.clientphone.infrastructure.ClientPhoneRepository;
@@ -55,6 +59,14 @@ import com.electrostoresystem.idtype.infrastructure.idtypeui.IdTypeUiController;
 import com.electrostoresystem.idtype.domain.service.IdTypeService;
 import com.electrostoresystem.idtype.infrastructure.IdTypeRepository;
 
+import com.electrostoresystem.order.application.CreateOrderUseCase;
+import com.electrostoresystem.order.application.DeleteOrderUseCase;
+import com.electrostoresystem.order.application.FindOrderByIdUseCase;
+import com.electrostoresystem.order.application.UpdateOrderUseCase;
+import com.electrostoresystem.order.infrastructure.orderui.OrderUiController;
+import com.electrostoresystem.order.domain.service.OrderService;
+import com.electrostoresystem.order.infrastructure.OrderRepository;
+
 import com.electrostoresystem.salestatus.application.CreateSaleStatusUseCase;
 import com.electrostoresystem.salestatus.application.DeleteSaleStatusUseCase;
 import com.electrostoresystem.salestatus.application.FindSaleStatusByIdUseCase;
@@ -96,6 +108,14 @@ import com.electrostoresystem.region.application.UpdateRegionUseCase;
 import com.electrostoresystem.region.infrastructure.regionui.RegionUiController;
 import com.electrostoresystem.region.domain.service.RegionService;
 import com.electrostoresystem.region.infrastructure.RegionRepository;
+
+import com.electrostoresystem.sale.application.CreateSaleUseCase;
+import com.electrostoresystem.sale.application.DeleteSaleUseCase;
+import com.electrostoresystem.sale.application.FindSaleByIdUseCase;
+import com.electrostoresystem.sale.application.UpdateSaleUseCase;
+import com.electrostoresystem.sale.infrastructure.saleui.SaleUiController;
+import com.electrostoresystem.sale.domain.service.SaleService;
+import com.electrostoresystem.sale.infrastructure.SaleRepository;
 
 import com.electrostoresystem.orderstatus.application.CreateOrderStatusUseCase;
 import com.electrostoresystem.orderstatus.application.DeleteOrderStatusUseCase;
@@ -144,176 +164,182 @@ public class CrudUiController{
     }
     
     public static void createAndShowMainUI() {
-        JFrame frame = new JFrame("Survey Management");
+        JFrame frame = new JFrame("Database Management");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(300, 800);
+        frame.setSize(700, 500);
         frame.setLocationRelativeTo(null);
 
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
-        buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        Dimension buttonSize = new Dimension(250, 50);
-        Font buttonFont = new Font("Arial", Font.BOLD, 18);
-
-        JButton btnClientPhones = createStyledButton("Client Phones", buttonSize, buttonFont);
-        btnClientPhones.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnClientPhones.addActionListener(e -> {
-            frame.setVisible(false);
-            openClientPhoneUiController();
-        });
-
-        buttonPanel.add(btnClientPhones);
-        buttonPanel.add(Box.createRigidArea(new Dimension(0, 15)));
-
-        JButton btnSupplierPhones = createStyledButton("Supplier Phones", buttonSize, buttonFont);
-        btnSupplierPhones.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnSupplierPhones.addActionListener(e -> {
-            frame.setVisible(false);
-            openSupplierPhoneUiController();
-        });
-
-        buttonPanel.add(btnSupplierPhones);
-        buttonPanel.add(Box.createRigidArea(new Dimension(0, 15)));
-
-        JButton btnCountries = createStyledButton("Countries", buttonSize, buttonFont);
-        btnCountries.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnCountries.addActionListener(e -> {
-            frame.setVisible(false);
-            openCountryUiController();
-        });
-
-        buttonPanel.add(btnCountries);
-        buttonPanel.add(Box.createRigidArea(new Dimension(0, 15)));
-
-        JButton btnClientTypes = createStyledButton("Client Types", buttonSize, buttonFont);
-        btnClientTypes.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnClientTypes.addActionListener(e -> {
-            frame.setVisible(false);
-            openClientTypeUiController();
-        });
         
-        buttonPanel.add(btnClientTypes);
-        buttonPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+        // Título superior
+        JLabel titleLabel = new JLabel("Database Management", JLabel.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        mainPanel.add(titleLabel, BorderLayout.NORTH);
         
-        JButton btnIdTypes = createStyledButton("Id Types", buttonSize, buttonFont);
-        btnIdTypes.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnIdTypes.addActionListener(e -> {
-            frame.setVisible(false);
-            openIdTypeUiController();
-        });
+        // Panel de botones
+        JPanel buttonPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(10, 10, 10, 10); // Espacio entre botones
         
-        buttonPanel.add(btnIdTypes);
-        buttonPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+        Dimension buttonSize = new Dimension(200, 70);
+        Font buttonFont = new Font("Arial", Font.BOLD, 16);
         
-        JButton btnOrderStatus = createStyledButton("Order Status", buttonSize, buttonFont);
-        btnOrderStatus.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnOrderStatus.addActionListener(e -> {
-            frame.setVisible(false);
-            openOrderStatusUiController();
-        });
-
-        buttonPanel.add(btnOrderStatus);
-        buttonPanel.add(Box.createRigidArea(new Dimension(0, 15)));
-
-        JButton btnSaleStatus = createStyledButton("Sale Status", buttonSize, buttonFont);
-        btnSaleStatus.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnSaleStatus.addActionListener(e -> {
-            frame.setVisible(false);
-            openSaleStatusUiController();
-        });
-
-        buttonPanel.add(btnSaleStatus);
-        buttonPanel.add(Box.createRigidArea(new Dimension(0, 15)));
-
-        JButton btnPaymentMethods = createStyledButton("Payment Methods", buttonSize, buttonFont);
-        btnPaymentMethods.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnPaymentMethods.addActionListener(e -> {
-            frame.setVisible(false);
-            openPaymentMethodsUiController();
-        });
-
-        buttonPanel.add(btnPaymentMethods);
-        buttonPanel.add(Box.createRigidArea(new Dimension(0, 15)));
-
-        JButton btnCategories = createStyledButton("Product Categories", buttonSize, buttonFont);
-        btnCategories.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnCategories.addActionListener(e -> {
-            frame.setVisible(false);
-            openCategoryUiController();
-        });
-
-        buttonPanel.add(btnCategories);
-        buttonPanel.add(Box.createRigidArea(new Dimension(0, 15)));
-
-        JButton btnBrands = createStyledButton("Product Brands", buttonSize, buttonFont);
-        btnBrands.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnBrands.addActionListener(e -> {
-            frame.setVisible(false);
-            openBrandUiController();
-        });
-
-        buttonPanel.add(btnBrands);
-        buttonPanel.add(Box.createRigidArea(new Dimension(0, 15)));
-
-        JButton btnRegions = createStyledButton("Regions", buttonSize, buttonFont);
-        btnRegions.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnRegions.addActionListener(e -> {
-            frame.setVisible(false);
-            openRegionUiController();
-        });
-
-        buttonPanel.add(btnRegions);
-        buttonPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+        // Primera columna (izquierda) - 6 botones
+        gbc.gridx = 0;
+        gbc.gridy = 0;
         
-        JButton btnCities = createStyledButton("Cities", buttonSize, buttonFont);
-        btnCities.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnCities.addActionListener(e -> {
-            frame.setVisible(false);
-            openCityUiController();
-        });
-
-        buttonPanel.add(btnCities);
-        buttonPanel.add(Box.createRigidArea(new Dimension(0, 15)));
-
         JButton btnClients = createStyledButton("Clients", buttonSize, buttonFont);
-        btnClients.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnClients.addActionListener(e -> {
             frame.setVisible(false);
             openClientUiController();
         });
+        buttonPanel.add(btnClients, gbc);
 
-        buttonPanel.add(btnClients);
-        buttonPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+        gbc.gridy++;
+        JButton btnClientPhones = createStyledButton("Client Phones", buttonSize, buttonFont);
+        btnClientPhones.addActionListener(e -> {
+            frame.setVisible(false);
+            openClientPhoneUiController();
+        });
+        buttonPanel.add(btnClientPhones, gbc);
 
+        gbc.gridy++;
+        JButton btnClientTypes = createStyledButton("Client Types", buttonSize, buttonFont);
+        btnClientTypes.addActionListener(e -> {
+            frame.setVisible(false);
+            openClientTypeUiController();
+        });
+        buttonPanel.add(btnClientTypes, gbc);
+        
+        gbc.gridy++;
+        JButton btnIdTypes = createStyledButton("Id Types", buttonSize, buttonFont);
+        btnIdTypes.addActionListener(e -> {
+            frame.setVisible(false);
+            openIdTypeUiController();
+        });
+        buttonPanel.add(btnIdTypes, gbc);
+
+        gbc.gridy++;
+        JButton btnSales = createStyledButton("Sales", buttonSize, buttonFont);
+        btnSales.addActionListener(e -> {
+            frame.setVisible(false);
+            openSaleUiController();
+        });
+        buttonPanel.add(btnSales, gbc);
+        
+        
+        
+        
+        // Segunda columna (centro) - 7 botones
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        JButton btnCountries = createStyledButton("Countries", buttonSize, buttonFont);
+        btnCountries.addActionListener(e -> {
+            frame.setVisible(false);
+            openCountryUiController();
+        });
+        buttonPanel.add(btnCountries, gbc);
+        
+        gbc.gridy++;
+        JButton btnRegions = createStyledButton("Regions", buttonSize, buttonFont);
+        btnRegions.addActionListener(e -> {
+            frame.setVisible(false);
+            openRegionUiController();
+        });
+        buttonPanel.add(btnRegions, gbc);
+        
+        gbc.gridy++;
+        JButton btnCities = createStyledButton("Cities", buttonSize, buttonFont);
+        btnCities.addActionListener(e -> {
+            frame.setVisible(false);
+            openCityUiController();
+        });
+        buttonPanel.add(btnCities, gbc);
+        
+        
+        
+        gbc.gridy++;
+        JButton btnPaymentMethods = createStyledButton("Payment Methods", buttonSize, buttonFont);
+        btnPaymentMethods.addActionListener(e -> {
+            frame.setVisible(false);
+            openPaymentMethodsUiController();
+        });
+        buttonPanel.add(btnPaymentMethods, gbc);
+        
+        gbc.gridy++;
+        JButton btnCategories = createStyledButton("Product Categories", buttonSize, buttonFont);
+        btnCategories.addActionListener(e -> {
+            frame.setVisible(false);
+            openCategoryUiController();
+        });
+        buttonPanel.add(btnCategories, gbc);
+        
+        gbc.gridy++;
+        JButton btnSaleStatus = createStyledButton("Sale Status", buttonSize, buttonFont);
+        btnSaleStatus.addActionListener(e -> {
+            frame.setVisible(false);
+            openSaleStatusUiController();
+        });
+        buttonPanel.add(btnSaleStatus, gbc);
+
+        gbc.gridy++;
+        JButton btnOrderStatus = createStyledButton("Order Status", buttonSize, buttonFont);
+        btnOrderStatus.addActionListener(e -> {
+            frame.setVisible(false);
+            openOrderStatusUiController();
+        });
+        buttonPanel.add(btnOrderStatus, gbc);
+        
+        
+        // Tercera columna (derecha) - 6 botones
+        gbc.gridx = 2;
+        gbc.gridy = 0;
         JButton btnSuppliers = createStyledButton("Suppliers", buttonSize, buttonFont);
-        btnSuppliers.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnSuppliers.addActionListener(e -> {
             frame.setVisible(false);
             openSupplierUiController();
         });
-
-        buttonPanel.add(btnSuppliers);
-        buttonPanel.add(Box.createRigidArea(new Dimension(0, 15)));
-
+        buttonPanel.add(btnSuppliers, gbc);
+        
+        gbc.gridy++;
+        JButton btnSupplierPhones = createStyledButton("Supplier Phones", buttonSize, buttonFont);
+        btnSupplierPhones.addActionListener(e -> {
+            frame.setVisible(false);
+            openSupplierPhoneUiController();
+        });
+        buttonPanel.add(btnSupplierPhones, gbc);
+        
+        gbc.gridy++;
         JButton btnProducts = createStyledButton("Products", buttonSize, buttonFont);
-        btnProducts.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnProducts.addActionListener(e -> {
             frame.setVisible(false);
             openProductUiController();
         });
-
-        buttonPanel.add(btnProducts);
-        buttonPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+        buttonPanel.add(btnProducts, gbc);
         
-
+        gbc.gridy++;
+        JButton btnBrands = createStyledButton("Product Brands", buttonSize, buttonFont);
+        btnBrands.addActionListener(e -> {
+            frame.setVisible(false);
+            openBrandUiController();
+        });
+        buttonPanel.add(btnBrands, gbc);
+        gbc.gridy++;
+        JButton btnOrders = createStyledButton("Orders", buttonSize, buttonFont);
+        btnOrders.addActionListener(e -> {
+            frame.setVisible(false);
+            openOrderUiController();
+        });
+        buttonPanel.add(btnOrders, gbc);
         
-        mainPanel.add(buttonPanel);
+        
+        // Agregar el panel de botones al centro del mainPanel
+        mainPanel.add(buttonPanel, BorderLayout.CENTER);
+
         frame.add(mainPanel);
+        frame.setResizable(false);
         frame.setVisible(true);
     }
 
@@ -512,6 +538,30 @@ public class CrudUiController{
 
         ProductUiController productUiController = new ProductUiController(createProductUseCase, findProductByIdUseCase, updateProductUseCase, deleteProductUseCase, findAllProductUseCase);
         productUiController.showCrudOptions();
+    }
+
+    private static void openOrderUiController() {
+        OrderService orderService = new OrderRepository();
+
+        CreateOrderUseCase createOrderUseCase = new CreateOrderUseCase(orderService);
+        FindOrderByIdUseCase findOrderByIdUseCase = new FindOrderByIdUseCase(orderService);
+        UpdateOrderUseCase updateOrderUseCase = new UpdateOrderUseCase(orderService);
+        DeleteOrderUseCase deleteOrderUseCase = new DeleteOrderUseCase(orderService);
+
+        OrderUiController orderUiController = new OrderUiController(createOrderUseCase, findOrderByIdUseCase, updateOrderUseCase, deleteOrderUseCase);
+        orderUiController.showCrudOptions();
+    }
+
+    private static void openSaleUiController() {
+        SaleService saleService = new SaleRepository();
+
+        CreateSaleUseCase createSaleUseCase = new CreateSaleUseCase(saleService);
+        FindSaleByIdUseCase findSaleByIdUseCase = new FindSaleByIdUseCase(saleService);
+        UpdateSaleUseCase updateSaleUseCase = new UpdateSaleUseCase(saleService);
+        DeleteSaleUseCase deleteSaleUseCase = new DeleteSaleUseCase(saleService);
+
+        SaleUiController saleUiController = new SaleUiController(createSaleUseCase, findSaleByIdUseCase, updateSaleUseCase, deleteSaleUseCase);
+        saleUiController.showCrudOptions();
     }
 
     
