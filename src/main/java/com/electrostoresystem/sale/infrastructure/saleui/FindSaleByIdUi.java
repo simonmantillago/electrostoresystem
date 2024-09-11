@@ -144,7 +144,7 @@ public class FindSaleByIdUi extends JFrame {
         if (saleOpt.isPresent()) {
             Sale sale = saleOpt.get();
             String message = String.format(
-                "Sale deleted successfully:\n\n" +
+                "Sale find successfully:\n\n" +
                 "Id: %s\n" +
                 "Sale Date: %s\n"+
                 "Client Id: %s \n"+

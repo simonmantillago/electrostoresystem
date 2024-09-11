@@ -22,6 +22,7 @@ import com.electrostoresystem.paymentmethods.application.FindAllPaymentMethodsUs
 import com.electrostoresystem.paymentmethods.domain.entity.PaymentMethods;
 import com.electrostoresystem.paymentmethods.domain.service.PaymentMethodsService;
 import com.electrostoresystem.paymentmethods.infrastructure.PaymentMethodsRepository;
+import com.electrostoresystem.report.infrastructure.reportui.PrintSaleReceiptUi;
 import com.electrostoresystem.sale.application.CreateSaleUseCase;
 import com.electrostoresystem.sale.application.FindLastSaleUseCase;
 import com.electrostoresystem.sale.domain.entity.Sale;
@@ -56,7 +57,7 @@ public class RegSaleUiController extends JFrame {
 
     private void initComponents() {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Create Sale");
+        setTitle("Sale Register");
         setSize(500, 550);
     
         JLabel jLabel1 = new JLabel("Sale Register");
@@ -226,6 +227,8 @@ public class RegSaleUiController extends JFrame {
                 }
             }
 
+            printReceipt(lastSale);
+
     
             
             resetFields();
@@ -242,6 +245,11 @@ public class RegSaleUiController extends JFrame {
         } else {
             return text;
         }
+    }
+
+    private static void printReceipt(Sale sale) {
+        PrintSaleReceiptUi printSaleReceiptUi = new PrintSaleReceiptUi();
+        printSaleReceiptUi.showReceiptSale(sale);
     }
 
     private void resetFields() {

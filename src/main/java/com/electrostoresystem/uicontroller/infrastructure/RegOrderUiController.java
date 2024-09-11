@@ -25,6 +25,8 @@ import com.electrostoresystem.paymentmethods.application.FindAllPaymentMethodsUs
 import com.electrostoresystem.paymentmethods.domain.entity.PaymentMethods;
 import com.electrostoresystem.paymentmethods.domain.service.PaymentMethodsService;
 import com.electrostoresystem.paymentmethods.infrastructure.PaymentMethodsRepository;
+import com.electrostoresystem.report.infrastructure.reportui.PrintOrderReceiptUi;
+import com.electrostoresystem.order.domain.entity.Order;
 import com.electrostoresystem.order.application.CreateOrderUseCase;
 import com.electrostoresystem.order.application.FindLastOrderUseCase;
 import com.electrostoresystem.order.domain.entity.Order;
@@ -57,10 +59,10 @@ public class RegOrderUiController extends JFrame {
 
     private void initComponents() {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Create Order");
+        setTitle("Orders System");
         setSize(500, 550);
     
-        JLabel jLabel1 = new JLabel("Create Order");
+        JLabel jLabel1 = new JLabel("Order Products");
         jLabel1.setFont(new Font("Segoe UI", Font.BOLD, 24));
         jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -237,7 +239,7 @@ public class RegOrderUiController extends JFrame {
                     createOrderDetailUseCase.execute(orderDetail);
                 }
             }
-
+            printReceipt(lastOrder);
     
             resetFields();
         } catch (Exception ex) {
@@ -267,6 +269,11 @@ public class RegOrderUiController extends JFrame {
     
         productPanel.revalidate();
         productPanel.repaint();
+    }
+
+    private static void printReceipt(Order order) {
+        PrintOrderReceiptUi printOrderReceiptUi = new PrintOrderReceiptUi();
+        printOrderReceiptUi.showReceiptOrder(order);
     }
 
 }

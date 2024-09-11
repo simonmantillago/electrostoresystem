@@ -17,6 +17,7 @@ import javax.swing.JTextArea;
 
 import com.electrostoresystem.order.application.DeleteOrderUseCase;
 import com.electrostoresystem.order.application.FindAllOrderUseCase;
+import com.electrostoresystem.order.application.FindOrderByIdUseCase;
 import com.electrostoresystem.order.domain.entity.Order;
 import com.electrostoresystem.order.domain.service.OrderService;
 import com.electrostoresystem.order.infrastructure.OrderRepository;
@@ -89,7 +90,7 @@ public class DeleteOrderUi extends JFrame {
         }
         addComponent(orderOptions, 1, 1);
 
-        JLabel lblReminder = new JLabel("Reminder: Delete All the details Related to this order first");
+        JLabel lblReminder = new JLabel("Reminder: This will Delete All the product stock Ordered in this order");
         addComponent(lblReminder, 2, 0, 2);
 
         JButton btnDelete = new JButton("Delete");
@@ -136,10 +137,13 @@ public class DeleteOrderUi extends JFrame {
         FindPaymentMethodsByIdUseCase  findPaymentMethodsByIdUseCase = new FindPaymentMethodsByIdUseCase(PaymentMethodsService);
 
         DeleteOrderDetailsByOrderIdUseCase  deleteOrderDetailsByOrderIdUseCase = new DeleteOrderDetailsByOrderIdUseCase(new OrderDetailRepository());
+        FindOrderByIdUseCase findOrderByIdUseCase = new FindOrderByIdUseCase(new OrderRepository());
 
         int orderCode = (Integer.parseInt(textBeforeDot(orderOptions.getSelectedItem().toString())));
-        Order deletedOrder = deleteOrderUseCase.execute(orderCode);
+        Optional<Order> orderfound = findOrderByIdUseCase.execute(orderCode);
+        float totalFound = orderfound.get().getTotal();
         deleteOrderDetailsByOrderIdUseCase.execute(orderCode);
+        Order deletedOrder = deleteOrderUseCase.execute(orderCode);
 
         Optional<OrderStatus> foundOrderStatus = findOrderStatusByIdUseCase.execute(deletedOrder.getStatusId());
         Optional<PaymentMethods> foundPaymentMethods = findPaymentMethodsByIdUseCase.execute(deletedOrder.getPayMethod());
@@ -159,7 +163,7 @@ public class DeleteOrderUi extends JFrame {
             deletedOrder.getSupplierId(),
             foundOrderStatus.get().getName(),
             foundPaymentMethods.get().getName(),
-            deletedOrder.getTotal()
+            totalFound
         );
         resultArea.setText(message);
     }

@@ -164,7 +164,7 @@ CREATE TABLE client_phones(
 
 DELIMITER //
 
-CREATE TRIGGER after_insert_sales_details
+CREATE TRIGGER calculateSubtotalTotalAndDiscount
 AFTER INSERT ON sales_details
 FOR EACH ROW
 BEGIN
@@ -172,17 +172,14 @@ BEGIN
     DECLARE v_discount_amount DECIMAL(10,2);
     DECLARE v_discount_percent DECIMAL(5,2);
 
-    -- Obtener el subtotal actual y el total de la venta
     SELECT SUM(subtotal) INTO v_total
     FROM sales_details
     WHERE sale_id = NEW.sale_id;
 
-    -- Actualizar el total de la venta
     UPDATE sales
     SET total = v_total
     WHERE id = NEW.sale_id;
 
-    -- Obtener el descuento y el porcentaje de descuento
     SELECT discount_amount, discount_percent
     INTO v_discount_amount, v_discount_percent
     FROM sales
@@ -192,7 +189,6 @@ BEGIN
     SET stock = stock - NEW.quantity
     WHERE id = NEW.product_id;
 
-    -- Si hay un descuento porcentual, recalcular el total con el descuento
     IF v_discount_percent IS NOT NULL THEN
         SET v_discount_amount = (v_total * v_discount_percent / 100);
         SET v_total = v_total - v_discount_amount;
@@ -206,14 +202,11 @@ END//
 
 DELIMITER ;
 
-
--- Delimiter para que el unit_price sea el mismo sale_price del product
 DELIMITER //
-CREATE TRIGGER set_unit_price_from_products
+CREATE TRIGGER setUnitPriceFromProducts
 BEFORE INSERT ON sales_details
 FOR EACH ROW
 BEGIN
-    -- Asignar el unit_price basado en el sale_price del producto correspondiente
     SET NEW.unit_price = (SELECT sale_price FROM products WHERE id = NEW.product_id);
 END//
 
@@ -221,27 +214,76 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE TRIGGER update_order_total
+CREATE TRIGGER update_saledetail_subtotal
+BEFORE UPDATE ON sales_details
+FOR EACH ROW
+BEGIN
+    SET NEW.subtotal = NEW.unit_price * NEW.quantity;
+END//
+
+DELIMITER ;
+
+
+
+
+
+DELIMITER //
+
+CREATE TRIGGER calculateSalesDetailSubtotal
+BEFORE INSERT ON sales_details
+FOR EACH ROW
+BEGIN
+    SET NEW.subtotal = NEW.unit_price * NEW.quantity;
+END//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER after_delete_sales_detail
+AFTER DELETE ON sales_details
+FOR EACH ROW
+BEGIN
+    DECLARE v_total DECIMAL(10,2);
+    
+    -- Restar el subtotal del detalle de venta eliminado al total de la venta relacionada
+    SELECT total INTO v_total
+    FROM sales
+    WHERE id = OLD.sale_id;
+
+    UPDATE sales
+    SET total = v_total - OLD.subtotal
+    WHERE id = OLD.sale_id;
+
+    -- Sumar la cantidad eliminada al stock del producto relacionado
+    UPDATE products
+    SET stock = stock + OLD.quantity
+    WHERE id = OLD.product_id;
+END//
+
+DELIMITER ;
+
+
+DELIMITER //
+
+
+CREATE TRIGGER updateOrderTotal
 AFTER INSERT ON order_details
 FOR EACH ROW
 BEGIN
-    DECLARE v_subtotal DECIMAL(10,2);
+    DECLARE v_total DECIMAL(10,2);
     DECLARE v_current_total DECIMAL(10,2);
     DECLARE os_status_name VARCHAR(50);
 
-    -- Calcular el subtotal multiplicando el unit_price por la cantidad
-    SET v_subtotal = NEW.unit_price * NEW.quantity;
+
+    SELECT SUM(subtotal) INTO v_total
+    FROM order_details
+    WHERE order_id = NEW.order_id;
     
-    -- Obtener el total actual del pedido
-    SELECT total INTO v_current_total
-    FROM orders
-    WHERE id = NEW.order_id;
-
-    -- Actualizar el total del pedido sumando el subtotal del detalle insertado
     UPDATE orders
-    SET total = v_current_total + v_subtotal
+    SET total = v_total
     WHERE id = NEW.order_id;
-
+  
     SELECT name INTO os_status_name
     FROM order_status
     WHERE id = (SELECT status_id FROM orders WHERE id = NEW.order_id);
@@ -254,28 +296,13 @@ BEGIN
 END//
 
 DELIMITER ;
- 
--- Delimiter para calcular el subtotal de sale_detail
+
 DELIMITER //
 
-CREATE TRIGGER calculate_sales_detail_subtotal
-BEFORE INSERT ON sales_details
-FOR EACH ROW
-BEGIN
-    -- Calcular el subtotal multiplicando el unit_price por la cantidad
-    SET NEW.subtotal = NEW.unit_price * NEW.quantity;
-END//
-
-DELIMITER ;
-
--- Delimiter para calcular el subtotal de order_detail
-DELIMITER //
-
-CREATE TRIGGER calculate_order_detail_subtotal
+CREATE TRIGGER calculateOrderDetailSubtotal
 BEFORE INSERT ON order_details
 FOR EACH ROW
 BEGIN
-    -- Calcular el subtotal multiplicando el unit_price por la cantidad
     SET NEW.subtotal = NEW.unit_price * NEW.quantity;
 END//
 
@@ -283,24 +310,61 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE TRIGGER update_stock_on_delivery
+CREATE TRIGGER updateStockDelivered
 AFTER UPDATE ON orders
 FOR EACH ROW
 BEGIN
     DECLARE delivered_status_id INT;
 
-    -- Obtener el ID del estado "Delivered"
     SELECT id INTO delivered_status_id
     FROM order_status
     WHERE name = 'Delivered';
 
-    -- Verificar si el status_id ha cambiado y si el nuevo valor es "Delivered"
     IF NEW.status_id != OLD.status_id AND NEW.status_id = delivered_status_id THEN
         UPDATE products p
         INNER JOIN order_details od ON p.id = od.product_id
         SET p.stock = p.stock + od.quantity
         WHERE od.order_id = NEW.id;
     END IF;
+END//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER updateOrderSubtotal
+BEFORE UPDATE ON order_details
+FOR EACH ROW
+BEGIN
+    DECLARE v_total DECIMAL(10,2);
+
+    SET NEW.subtotal = NEW.unit_price * NEW.quantity;
+
+END//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER after_delete_order_detail
+AFTER DELETE ON order_details
+FOR EACH ROW
+BEGIN
+    DECLARE v_total DECIMAL(10,2);
+    
+    -- Restar el subtotal del detalle de orden eliminado al total de la orden relacionada
+    SELECT total INTO v_total
+    FROM orders
+    WHERE id = OLD.order_id;
+
+    UPDATE orders
+    SET total = v_total - OLD.subtotal
+    WHERE id = OLD.order_id;
+
+    -- Restar la cantidad eliminada del stock del producto relacionado
+    UPDATE products
+    SET stock = stock - OLD.quantity
+    WHERE id = OLD.product_id;
 END//
 
 DELIMITER ;

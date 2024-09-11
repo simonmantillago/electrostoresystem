@@ -20,7 +20,7 @@ public class MainUiController {
     public static void createAndShowMainUI() {
         JFrame frame = new JFrame("Electro Store");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(700, 600);
+        frame.setSize(700, 700);
         frame.setLocationRelativeTo(null);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
@@ -32,8 +32,8 @@ public class MainUiController {
         Image salesImage = salesImageIcon.getImage().getScaledInstance(500, 200, Image.SCALE_SMOOTH);
         salesImageIcon = new ImageIcon(salesImage);
 
-        JLabel salesImageLabel = new JLabel(salesImageIcon, JLabel.CENTER);
-        topPanel.add(salesImageLabel, BorderLayout.CENTER);
+        JLabel imageLabel = new JLabel(salesImageIcon, JLabel.CENTER);
+        topPanel.add(imageLabel, BorderLayout.CENTER);
 
         mainPanel.add(topPanel, BorderLayout.NORTH);
 
@@ -54,6 +54,14 @@ public class MainUiController {
             openRegSale();
         });
         buttonPanel.add(btnRegSale, gbc);
+        
+        gbc.gridy++;
+        JButton btnRefund = createStyledButton("Refunds", buttonSize, buttonFont);
+        btnRefund.addActionListener(e -> {
+            frame.setVisible(false);
+            openRefundProduct();
+        });
+        buttonPanel.add(btnRefund, gbc);
 
         gbc.gridy++;
         JButton btnRegOrder = createStyledButton("Orders", buttonSize, buttonFont);
@@ -95,6 +103,11 @@ public class MainUiController {
     private static void openRegOrder() {
         RegOrderUiController regOrderUiController = new RegOrderUiController();
         regOrderUiController.frmRegOrder();
+    }
+
+    private static void openRefundProduct() {
+        RefundSaleProductUi refundSaleProductUi = new RefundSaleProductUi();
+        refundSaleProductUi.showRefundUi();
     }
 
     private static void openCrudUiController() {
