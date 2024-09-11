@@ -17,38 +17,29 @@ import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import com.electrostoresystem.saledetail.application.FindAllSaleDetailUseCase;
 import com.electrostoresystem.saledetail.application.FindSaleDetailByIdUseCase;
 import com.electrostoresystem.saledetail.application.FindSaleDetailsBySaleIdUseCase;
 import com.electrostoresystem.saledetail.domain.entity.SaleDetail;
 import com.electrostoresystem.saledetail.domain.service.SaleDetailService;
 import com.electrostoresystem.saledetail.infrastructure.SaleDetailRepository;
 
-
-import com.electrostoresystem.paymentmethods.application.FindPaymentMethodsByIdUseCase;
-import com.electrostoresystem.paymentmethods.domain.entity.PaymentMethods;
-import com.electrostoresystem.paymentmethods.domain.service.PaymentMethodsService;
-import com.electrostoresystem.paymentmethods.infrastructure.PaymentMethodsRepository;
 import com.electrostoresystem.product.application.FindProductByIdUseCase;
 import com.electrostoresystem.product.domain.entity.Product;
 import com.electrostoresystem.product.domain.service.ProductService;
 import com.electrostoresystem.product.infrastructure.ProductRepository;
+
 import com.electrostoresystem.sale.application.FindAllSaleUseCase;
 import com.electrostoresystem.sale.application.FindSaleByIdUseCase;
 import com.electrostoresystem.sale.domain.entity.Sale;
 import com.electrostoresystem.sale.domain.service.SaleService;
 import com.electrostoresystem.sale.infrastructure.SaleRepository;
-import com.electrostoresystem.supplier.application.FindSupplierByIdUseCase;
-import com.electrostoresystem.supplier.domain.entity.Supplier;
-import com.electrostoresystem.supplier.domain.service.SupplierService;
-import com.electrostoresystem.supplier.infrastructure.SupplierRepository;
 
 public class FindSaleDetailByIdUi extends JFrame {
     private final FindSaleDetailByIdUseCase findSaleDetailByIdUseCase;
     private final SaleDetailUiController saleDetailUiController;
     private JComboBox<String> saleBox,saleDetailOptions; 
     private JTextArea resultArea;
-    private int saleId, clientId;
+    private int saleId;
 
 
 
@@ -69,8 +60,7 @@ public class FindSaleDetailByIdUi extends JFrame {
 
 
     private void initComponents() {
-        SaleDetailService saleDetailService = new SaleDetailRepository();
-        FindAllSaleDetailUseCase findAllSaleDetailUseCase = new FindAllSaleDetailUseCase(saleDetailService);
+
 
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -97,7 +87,7 @@ public class FindSaleDetailByIdUi extends JFrame {
         saleBox.addActionListener(e -> updateSaleDetailBox());
         
         JLabel lblSaleDetail = new JLabel("Product:");
-        addComponent(lblId, 2, 0);
+        addComponent(lblSaleDetail, 2, 0);
 
         saleDetailOptions = new JComboBox<>();
         
@@ -153,7 +143,7 @@ public class FindSaleDetailByIdUi extends JFrame {
             String productName = foundProdcut.get().getName();
             SaleDetail saleDetail = foundSaleDetail.get();
             String message = String.format(
-                "SaleDetail deleted successfully:\n\n" +
+                "SaleDetail found successfully:\n\n" +
                 "Id: %d\n" +
                 "Sale Id: %s\n" +
                 "Product: %s\n"+
@@ -170,17 +160,6 @@ public class FindSaleDetailByIdUi extends JFrame {
             resultArea.setText(message);
         } else {
             resultArea.setText("SaleDetail not found!");
-        }
-    }
-
-       private void reloadComboBoxOptions() {
-        saleBox.removeAllItems();
-        saleDetailOptions.removeAllItems();
-        SaleService saleService = new SaleRepository();
-        FindAllSaleUseCase  findAllSaleUseCase = new FindAllSaleUseCase(saleService);
-        List<Sale> sales = findAllSaleUseCase.execute();
-        for (Sale sale : sales){
-            saleBox.addItem(sale.getId() + ". " + sale.getClientId() + " " + sale.getDate());
         }
     }
 

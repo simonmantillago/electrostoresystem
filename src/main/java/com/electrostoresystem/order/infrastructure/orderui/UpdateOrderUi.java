@@ -18,8 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.JComboBox;
 
 import com.electrostoresystem.order.application.UpdateOrderUseCase;
-import com.electrostoresystem.brand.domain.entity.Brand;
-import com.electrostoresystem.category.domain.entity.Category;
 import com.electrostoresystem.order.application.FindAllOrderUseCase;
 import com.electrostoresystem.order.application.FindOrderByIdUseCase; 
 import com.electrostoresystem.order.domain.entity.Order;

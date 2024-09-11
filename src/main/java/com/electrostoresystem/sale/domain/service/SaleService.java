@@ -11,4 +11,5 @@ public interface SaleService {
     Sale deleteSale (int id);
     Optional<Sale> findSaleById(int id);
     List<Sale> findAllSale();
+    Sale findLastSale();
 }

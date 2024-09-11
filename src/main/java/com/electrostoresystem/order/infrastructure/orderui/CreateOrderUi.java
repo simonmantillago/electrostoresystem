@@ -13,7 +13,6 @@ package com.electrostoresystem.order.infrastructure.orderui;
     import javax.swing.JLabel;
     import javax.swing.JOptionPane;
     import javax.swing.JPanel;
-    import javax.swing.JTextField;
     import javax.swing.SwingConstants;
     import javax.swing.JComboBox;
 
@@ -41,7 +40,6 @@ public class CreateOrderUi extends JFrame {
     private final OrderUiController orderUiController; 
 
     private JComboBox<String> supplierBox, statusBox,payBox; 
-    private JButton jButton1; // Reset
     private JButton jButton2; // Save
     private JButton jButton3; // Go back
 
@@ -151,7 +149,6 @@ public class CreateOrderUi extends JFrame {
     
 
             createOrderUseCase.execute(order); 
-            JOptionPane.showMessageDialog(this, "Order added successfully!");
            
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

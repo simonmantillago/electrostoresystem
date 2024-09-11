@@ -33,7 +33,7 @@ public class SaleStatusRepository implements SaleStatusService{
     @Override
     public void createSaleStatus(SaleStatus saleStatus) {
         try {
-            String query = "INSERT INTO client_types (name) VALUES (?)";
+            String query = "INSERT INTO sale_status (name) VALUES (?)";
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, saleStatus.getName());
             int rowsAffected = ps.executeUpdate();
@@ -50,7 +50,7 @@ public class SaleStatusRepository implements SaleStatusService{
 
     @Override
     public void updateSaleStatus(SaleStatus saleStatus) {
-        String query = "UPDATE client_types SET name = ? WHERE id = ?";
+        String query = "UPDATE sale_status SET name = ? WHERE id = ?";
         try(PreparedStatement ps = connection.prepareStatement(query)){
             ps.setString(1, saleStatus.getName());
             ps.setInt(2, saleStatus.getId());
@@ -69,8 +69,8 @@ public class SaleStatusRepository implements SaleStatusService{
 @Override
     public SaleStatus deleteSaleStatus(int id) {
         SaleStatus saleStatus = null;
-        String selectQuery = "SELECT * FROM client_types WHERE id = ?";
-        String deleteQuery = "DELETE FROM client_types WHERE id = ?";
+        String selectQuery = "SELECT * FROM sale_status WHERE id = ?";
+        String deleteQuery = "DELETE FROM sale_status WHERE id = ?";
         
         try (PreparedStatement selectPs = connection.prepareStatement(selectQuery);
             PreparedStatement deletePs = connection.prepareStatement(deleteQuery)) {
@@ -106,7 +106,7 @@ public class SaleStatusRepository implements SaleStatusService{
 
     @Override
     public Optional<SaleStatus> findSaleStatusById(int id) {
-        String query = "SELECT id,name FROM client_types WHERE id = ?";
+        String query = "SELECT id,name FROM sale_status WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, id);
             try(ResultSet rs = ps.executeQuery()){
@@ -127,7 +127,7 @@ public class SaleStatusRepository implements SaleStatusService{
 
     @Override
     public Optional<SaleStatus> findSaleStatusByName(String name) {
-        String query = "SELECT id,name FROM client_types WHERE name = ?";
+        String query = "SELECT id,name FROM sale_status WHERE name = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setString(1, name);
             try(ResultSet rs = ps.executeQuery()){
@@ -150,7 +150,7 @@ public class SaleStatusRepository implements SaleStatusService{
     @Override
     public List<SaleStatus> findAllSaleStatus() {
         List<SaleStatus> saleStatuss = new ArrayList<>();
-        String query = "SELECT id,name FROM client_types";
+        String query = "SELECT id,name FROM sale_status";
         
         try (PreparedStatement ps = connection.prepareStatement(query);
             ResultSet rs = ps.executeQuery()) {

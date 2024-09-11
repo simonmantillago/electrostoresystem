@@ -29,7 +29,7 @@ VALUES ('0908', 'EnergySource Supplies', 'sales@energysource.com', 1, 'Industria
 
 INSERT INTO payment_methods (name) VALUES ('Credit Card'), ('Bank Transfer'), ('Cash');
 
-INSERT INTO sale_status (name) VALUES ('Refund'), ('Completed');
+INSERT INTO sale_status (name) VALUES ('Completed'),('Refund');
 
 INSERT INTO sales (client_id, payment_method, discount_percent, status_id)
 VALUES ('101', 1, 10.00, 2),
@@ -41,7 +41,7 @@ VALUES (1, 1, 10),
        (2, 2, 5),
        (3, 3, 20);
 
-INSERT INTO order_status (name) VALUES ('Ordered'),('Delivered');
+INSERT INTO order_status (name) VALUES('Delivered'),('Ordered');
 
 INSERT INTO orders (supplier_id, status_id, payment_method, total)
 VALUES ('0908',2, 1, 0),
@@ -49,9 +49,9 @@ VALUES ('0908',2, 1, 0),
        ('4565',2, 3, 0);
 
 INSERT INTO order_details (order_id, product_id, quantity, unit_price)
-VALUES (1, 1, 50, 40.00),  -- Precio menor que 45.00
-       (2, 2, 100, 25.00),  -- Precio menor que 28.00
-       (3, 3, 75, 50.00);   -- Precio menor que 55.00
+VALUES (1, 1, 50, 40.00), 
+       (2, 2, 100, 25.00), 
+       (3, 3, 75, 50.00);  
 
 INSERT INTO supplier_phones (supplier_id, phone) 
 VALUES ('0908', '+1-555-1234'),

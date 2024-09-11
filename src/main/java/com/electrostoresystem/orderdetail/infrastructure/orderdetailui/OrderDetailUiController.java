@@ -1,4 +1,4 @@
-package com.electrostoresystem.order.infrastructure.orderui;
+package com.electrostoresystem.orderdetail.infrastructure.orderdetailui;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -11,33 +11,33 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.electrostoresystem.order.application.CreateOrderUseCase;
-import com.electrostoresystem.order.application.DeleteOrderUseCase;
-import com.electrostoresystem.order.application.FindOrderByIdUseCase;
-import com.electrostoresystem.order.application.UpdateOrderUseCase;
+import com.electrostoresystem.orderdetail.application.CreateOrderDetailUseCase;
+import com.electrostoresystem.orderdetail.application.DeleteOrderDetailUseCase;
+import com.electrostoresystem.orderdetail.application.FindOrderDetailByIdUseCase;
+import com.electrostoresystem.orderdetail.application.UpdateOrderDetailUseCase;
 import com.electrostoresystem.uicontroller.infrastructure.CrudUiController;
 
-public class OrderUiController {
-    private final CreateOrderUseCase createOrderUseCase;
-    private final FindOrderByIdUseCase findOrderByIdUseCase;
-    private final UpdateOrderUseCase updateOrderUseCase;
-    private final DeleteOrderUseCase deleteOrderUseCase;
+public class OrderDetailUiController {
+    private final CreateOrderDetailUseCase createOrderDetailUseCase;
+    private final FindOrderDetailByIdUseCase findOrderDetailByIdUseCase;
+    private final UpdateOrderDetailUseCase updateOrderDetailUseCase;
+    private final DeleteOrderDetailUseCase deleteOrderDetailUseCase;
     private JFrame frame;
 
     
 
 
 
-    public OrderUiController(CreateOrderUseCase createOrderUseCase, FindOrderByIdUseCase findOrderByIdUseCase,
-            UpdateOrderUseCase updateOrderUseCase, DeleteOrderUseCase deleteOrderUseCase) {
-        this.createOrderUseCase = createOrderUseCase;
-        this.findOrderByIdUseCase = findOrderByIdUseCase;
-        this.updateOrderUseCase = updateOrderUseCase;
-        this.deleteOrderUseCase = deleteOrderUseCase;
+    public OrderDetailUiController(CreateOrderDetailUseCase createOrderDetailUseCase, FindOrderDetailByIdUseCase findOrderDetailByIdUseCase,
+            UpdateOrderDetailUseCase updateOrderDetailUseCase, DeleteOrderDetailUseCase deleteOrderDetailUseCase) {
+        this.createOrderDetailUseCase = createOrderDetailUseCase;
+        this.findOrderDetailByIdUseCase = findOrderDetailByIdUseCase;
+        this.updateOrderDetailUseCase = updateOrderDetailUseCase;
+        this.deleteOrderDetailUseCase = deleteOrderDetailUseCase;
     }
 
     public void showCrudOptions() {
-        frame = new JFrame("Order Management System");
+        frame = new JFrame("OrderDetail Management System");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 500);
         frame.setLocationRelativeTo(null);
@@ -48,7 +48,7 @@ public class OrderUiController {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Añadir título grande
-        JLabel titleLabel = new JLabel("Orders");
+        JLabel titleLabel = new JLabel("OrderDetails");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 36));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(titleLabel);
@@ -63,11 +63,11 @@ public class OrderUiController {
         Dimension buttonSize = new Dimension(250, 50);
         Font buttonFont = new Font("Arial", Font.BOLD, 18);
 
-        // Botón Create Order
+        // Botón Create OrderDetail
         JButton btnCreate = createStyledButton("Create", buttonSize, buttonFont);
         btnCreate.addActionListener(e -> {
-            CreateOrderUi orderUi = new CreateOrderUi(createOrderUseCase, this);
-            orderUi.frmRegOrder();
+            CreateOrderDetailUi orderDetailUi = new CreateOrderDetailUi(createOrderDetailUseCase, this);
+            orderDetailUi.frmRegOrderDetail();
             frame.setVisible(false);
         });
         buttonPanel.add(btnCreate);
@@ -75,8 +75,8 @@ public class OrderUiController {
 
         JButton btnUpdate = createStyledButton("Update", buttonSize, buttonFont);
         btnUpdate.addActionListener(e -> {
-            UpdateOrderUi updateOrderUi = new UpdateOrderUi(updateOrderUseCase, this);
-            updateOrderUi.frmUpdateOrder();
+            UpdateOrderDetailUi updateOrderDetailUi = new UpdateOrderDetailUi(updateOrderDetailUseCase, this);
+            updateOrderDetailUi.frmUpdateOrderDetail();
             frame.setVisible(false);
         });
         buttonPanel.add(btnUpdate);
@@ -84,8 +84,8 @@ public class OrderUiController {
 
         JButton btnFind = createStyledButton("Find", buttonSize, buttonFont);
         btnFind.addActionListener(e -> {
-            FindOrderByIdUi findOrderUi = new FindOrderByIdUi(findOrderByIdUseCase, this);
-            findOrderUi.showFindOrder();
+            FindOrderDetailByIdUi findOrderDetailUi = new FindOrderDetailByIdUi(findOrderDetailByIdUseCase, this);
+            findOrderDetailUi.showFindOrderDetail();
             frame.setVisible(false);
         });
         buttonPanel.add(btnFind);
@@ -93,7 +93,7 @@ public class OrderUiController {
 
         JButton btnDelete = createStyledButton("Delete", buttonSize, buttonFont);
         btnDelete.addActionListener(e -> {
-            DeleteOrderUi deleteCustomerUi = new DeleteOrderUi(deleteOrderUseCase, this);
+            DeleteOrderDetailUi deleteCustomerUi = new DeleteOrderDetailUi(deleteOrderDetailUseCase, this);
             deleteCustomerUi.showDeleteCustomer();
             frame.setVisible(false);
         });

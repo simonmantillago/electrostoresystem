@@ -67,6 +67,14 @@ import com.electrostoresystem.order.infrastructure.orderui.OrderUiController;
 import com.electrostoresystem.order.domain.service.OrderService;
 import com.electrostoresystem.order.infrastructure.OrderRepository;
 
+import com.electrostoresystem.orderdetail.application.CreateOrderDetailUseCase;
+import com.electrostoresystem.orderdetail.application.DeleteOrderDetailUseCase;
+import com.electrostoresystem.orderdetail.application.FindOrderDetailByIdUseCase;
+import com.electrostoresystem.orderdetail.application.UpdateOrderDetailUseCase;
+import com.electrostoresystem.orderdetail.infrastructure.orderdetailui.OrderDetailUiController;
+import com.electrostoresystem.orderdetail.domain.service.OrderDetailService;
+import com.electrostoresystem.orderdetail.infrastructure.OrderDetailRepository;
+
 import com.electrostoresystem.salestatus.application.CreateSaleStatusUseCase;
 import com.electrostoresystem.salestatus.application.DeleteSaleStatusUseCase;
 import com.electrostoresystem.salestatus.application.FindSaleStatusByIdUseCase;
@@ -116,6 +124,14 @@ import com.electrostoresystem.sale.application.UpdateSaleUseCase;
 import com.electrostoresystem.sale.infrastructure.saleui.SaleUiController;
 import com.electrostoresystem.sale.domain.service.SaleService;
 import com.electrostoresystem.sale.infrastructure.SaleRepository;
+
+import com.electrostoresystem.saledetail.application.CreateSaleDetailUseCase;
+import com.electrostoresystem.saledetail.application.DeleteSaleDetailUseCase;
+import com.electrostoresystem.saledetail.application.FindSaleDetailByIdUseCase;
+import com.electrostoresystem.saledetail.application.UpdateSaleDetailUseCase;
+import com.electrostoresystem.saledetail.infrastructure.saledetailui.SaleDetailUiController;
+import com.electrostoresystem.saledetail.domain.service.SaleDetailService;
+import com.electrostoresystem.saledetail.infrastructure.SaleDetailRepository;
 
 import com.electrostoresystem.orderstatus.application.CreateOrderStatusUseCase;
 import com.electrostoresystem.orderstatus.application.DeleteOrderStatusUseCase;
@@ -228,6 +244,14 @@ public class CrudUiController{
         });
         buttonPanel.add(btnSales, gbc);
         
+        gbc.gridy++;
+        JButton btnSalesDetails = createStyledButton("Sale Details", buttonSize, buttonFont);
+        btnSalesDetails.addActionListener(e -> {
+            frame.setVisible(false);
+            openSaleDetailUiController();
+        });
+        buttonPanel.add(btnSalesDetails, gbc);
+        
         
         
         
@@ -290,6 +314,14 @@ public class CrudUiController{
             openOrderStatusUiController();
         });
         buttonPanel.add(btnOrderStatus, gbc);
+
+        gbc.gridy++;
+        JButton btnBack = createStyledButton(" <- Go Back", buttonSize, buttonFont);
+        btnBack.addActionListener(e -> {
+            frame.setVisible(false);
+            MainUiController.createAndShowMainUI();
+        });
+        buttonPanel.add(btnBack, gbc);
         
         
         // Tercera columna 
@@ -332,6 +364,14 @@ public class CrudUiController{
             openOrderUiController();
         });
         buttonPanel.add(btnOrders, gbc);
+
+        gbc.gridy++;
+        JButton btnOrderDetailss = createStyledButton("OrderDetailss", buttonSize, buttonFont);
+        btnOrderDetailss.addActionListener(e -> {
+            frame.setVisible(false);
+            openOrderDetailUiController();
+        });
+        buttonPanel.add(btnOrderDetailss, gbc);
         
         
         // Agregar el panel de botones al centro del mainPanel
@@ -561,6 +601,30 @@ public class CrudUiController{
 
         SaleUiController saleUiController = new SaleUiController(createSaleUseCase, findSaleByIdUseCase, updateSaleUseCase, deleteSaleUseCase);
         saleUiController.showCrudOptions();
+    }
+
+    private static void openSaleDetailUiController() {
+        SaleDetailService saleDetailService = new SaleDetailRepository();
+
+        CreateSaleDetailUseCase createSaleDetailUseCase = new CreateSaleDetailUseCase(saleDetailService);
+        FindSaleDetailByIdUseCase findSaleDetailByIdUseCase = new FindSaleDetailByIdUseCase(saleDetailService);
+        UpdateSaleDetailUseCase updateSaleDetailUseCase = new UpdateSaleDetailUseCase(saleDetailService);
+        DeleteSaleDetailUseCase deleteSaleDetailUseCase = new DeleteSaleDetailUseCase(saleDetailService);
+
+        SaleDetailUiController saleDetailUiController = new SaleDetailUiController(createSaleDetailUseCase, findSaleDetailByIdUseCase, updateSaleDetailUseCase, deleteSaleDetailUseCase);
+        saleDetailUiController.showCrudOptions();
+    }
+
+    private static void openOrderDetailUiController() {
+        OrderDetailService orderDetailService = new OrderDetailRepository();
+
+        CreateOrderDetailUseCase createOrderDetailUseCase = new CreateOrderDetailUseCase(orderDetailService);
+        FindOrderDetailByIdUseCase findOrderDetailByIdUseCase = new FindOrderDetailByIdUseCase(orderDetailService);
+        UpdateOrderDetailUseCase updateOrderDetailUseCase = new UpdateOrderDetailUseCase(orderDetailService);
+        DeleteOrderDetailUseCase deleteOrderDetailUseCase = new DeleteOrderDetailUseCase(orderDetailService);
+
+        OrderDetailUiController orderDetailUiController = new OrderDetailUiController(createOrderDetailUseCase, findOrderDetailByIdUseCase, updateOrderDetailUseCase, deleteOrderDetailUseCase);
+        orderDetailUiController.showCrudOptions();
     }
 
     

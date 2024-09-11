@@ -16,39 +16,21 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import com.electrostoresystem.saledetail.application.DeleteSaleDetailUseCase;
-import com.electrostoresystem.saledetail.application.FindAllSaleDetailUseCase;
-import com.electrostoresystem.saledetail.application.FindSaleDetailByIdUseCase;
 import com.electrostoresystem.saledetail.application.FindSaleDetailsBySaleIdUseCase;
 import com.electrostoresystem.saledetail.domain.entity.SaleDetail;
 import com.electrostoresystem.saledetail.domain.service.SaleDetailService;
 import com.electrostoresystem.saledetail.infrastructure.SaleDetailRepository;
-import com.electrostoresystem.country.application.FindCountryByIdUseCase;
-import com.electrostoresystem.country.domain.entity.Country;
-import com.electrostoresystem.country.domain.service.CountryService;
-import com.electrostoresystem.country.infrastructure.CountryRepository;
-import com.electrostoresystem.paymentmethods.application.FindAllPaymentMethodsUseCase;
-import com.electrostoresystem.paymentmethods.application.FindPaymentMethodsByIdUseCase;
-import com.electrostoresystem.paymentmethods.domain.entity.PaymentMethods;
-import com.electrostoresystem.paymentmethods.domain.service.PaymentMethodsService;
-import com.electrostoresystem.paymentmethods.infrastructure.PaymentMethodsRepository;
-import com.electrostoresystem.paymentmethods.infrastructure.paymentmethodsui.FindPaymentMethodsByIdUi;
+
 import com.electrostoresystem.product.application.FindProductByIdUseCase;
 import com.electrostoresystem.product.domain.entity.Product;
 import com.electrostoresystem.product.domain.service.ProductService;
 import com.electrostoresystem.product.infrastructure.ProductRepository;
-import com.electrostoresystem.region.application.FindRegionsByCountryUseCase;
-import com.electrostoresystem.region.domain.entity.Region;
-import com.electrostoresystem.region.domain.service.RegionService;
-import com.electrostoresystem.region.infrastructure.RegionRepository;
+
 import com.electrostoresystem.sale.application.FindAllSaleUseCase;
 import com.electrostoresystem.sale.application.FindSaleByIdUseCase;
 import com.electrostoresystem.sale.domain.entity.Sale;
 import com.electrostoresystem.sale.domain.service.SaleService;
 import com.electrostoresystem.sale.infrastructure.SaleRepository;
-import com.electrostoresystem.supplier.application.FindSupplierByIdUseCase;
-import com.electrostoresystem.supplier.domain.entity.Supplier;
-import com.electrostoresystem.supplier.domain.service.SupplierService;
-import com.electrostoresystem.supplier.infrastructure.SupplierRepository;
 
 
 public class DeleteSaleDetailUi extends JFrame {
@@ -56,7 +38,7 @@ public class DeleteSaleDetailUi extends JFrame {
     private final SaleDetailUiController saleDetailUiController;
     private JComboBox<String> saleBox,saleDetailOptions; 
     private JTextArea resultArea;
-    private int saleId, clientId;
+    private int saleId;
     
     public DeleteSaleDetailUi(DeleteSaleDetailUseCase deleteSaleDetailUseCase, SaleDetailUiController saleDetailUiController) {
         this.deleteSaleDetailUseCase = deleteSaleDetailUseCase;
@@ -75,8 +57,7 @@ public class DeleteSaleDetailUi extends JFrame {
     }
 
     private void initComponents() {
-        SaleDetailService saleDetailService = new SaleDetailRepository();
-        FindAllSaleDetailUseCase findAllSaleDetailUseCase = new FindAllSaleDetailUseCase(saleDetailService);
+
 
 
         setLayout(new GridBagLayout());
@@ -104,11 +85,11 @@ public class DeleteSaleDetailUi extends JFrame {
         saleBox.addActionListener(e -> updateSaleDetailBox());
         
         JLabel lblSaleDetail = new JLabel("Product:");
-        addComponent(lblId, 2, 0);
+        addComponent(lblSaleDetail, 2, 0);
 
+        
         saleDetailOptions = new JComboBox<>();
         
-
         addComponent(saleDetailOptions, 2, 1);
 
         JButton btnDelete = new JButton("Delete");
@@ -194,29 +175,32 @@ public class DeleteSaleDetailUi extends JFrame {
     private void updateSaleDetailBox(){
         SaleService saleService = new SaleRepository();
         FindSaleByIdUseCase findSaleByIdUseCase = new FindSaleByIdUseCase(saleService);
-
+    
         SaleDetailService saleDetailService = new SaleDetailRepository();
         FindSaleDetailsBySaleIdUseCase findSaleDetailsBySaleUseCase = new FindSaleDetailsBySaleIdUseCase(saleDetailService);
-
+    
         ProductService productService = new ProductRepository();
         FindProductByIdUseCase findProductByIdUseCase = new FindProductByIdUseCase(productService);
         
         saleDetailOptions.removeAllItems();
-
-        this.saleId = Integer.parseInt(textBeforeDot(saleBox.getSelectedItem().toString()));
-
-        Optional<Sale> saleFound = findSaleByIdUseCase.execute(saleId);
-        if (saleFound.isPresent()) {
-            List<SaleDetail> saleDetails = findSaleDetailsBySaleUseCase.execute(saleId);
-            for (SaleDetail saleDetailItem : saleDetails) {
-
-                Optional<Product> foundProdcut = findProductByIdUseCase.execute(saleDetailItem.getProductId());
-                String productName = foundProdcut.get().getName();
-
-                saleDetailOptions.addItem(saleDetailItem.getId() + ". " + productName + " (" + saleDetailItem.getQuantity() + ")");
+    
+        if (saleBox.getSelectedItem() != null) {
+            this.saleId = Integer.parseInt(textBeforeDot(saleBox.getSelectedItem().toString()));
+    
+            Optional<Sale> saleFound = findSaleByIdUseCase.execute(saleId);
+            if (saleFound.isPresent()) {
+                List<SaleDetail> saleDetails = findSaleDetailsBySaleUseCase.execute(saleId);
+                for (SaleDetail saleDetailItem : saleDetails) {
+    
+                    Optional<Product> foundProdcut = findProductByIdUseCase.execute(saleDetailItem.getProductId());
+                    String productName = foundProdcut.get().getName();
+    
+                    saleDetailOptions.addItem(saleDetailItem.getId() + ". " + productName + " (" + saleDetailItem.getQuantity() + ")");
+                }
             }
         }
     }
+    
 
     private String textBeforeDot(String text) {
         int position = text.indexOf('.');

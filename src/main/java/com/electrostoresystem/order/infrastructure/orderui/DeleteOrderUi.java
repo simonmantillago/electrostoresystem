@@ -17,22 +17,19 @@ import javax.swing.JTextArea;
 
 import com.electrostoresystem.order.application.DeleteOrderUseCase;
 import com.electrostoresystem.order.application.FindAllOrderUseCase;
-import com.electrostoresystem.order.application.FindOrderByIdUseCase;
 import com.electrostoresystem.order.domain.entity.Order;
 import com.electrostoresystem.order.domain.service.OrderService;
 import com.electrostoresystem.order.infrastructure.OrderRepository;
-import com.electrostoresystem.orderstatus.application.FindAllOrderStatusUseCase;
+import com.electrostoresystem.orderdetail.application.DeleteOrderDetailsByOrderIdUseCase;
+import com.electrostoresystem.orderdetail.infrastructure.OrderDetailRepository;
 import com.electrostoresystem.orderstatus.application.FindOrderStatusByIdUseCase;
 import com.electrostoresystem.orderstatus.domain.entity.OrderStatus;
 import com.electrostoresystem.orderstatus.domain.service.OrderStatusService;
 import com.electrostoresystem.orderstatus.infrastructure.OrderStatusRepository;
-import com.electrostoresystem.orderstatus.infrastructure.orderstatusui.FindOrderStatusByIdUi;
-import com.electrostoresystem.paymentmethods.application.FindAllPaymentMethodsUseCase;
 import com.electrostoresystem.paymentmethods.application.FindPaymentMethodsByIdUseCase;
 import com.electrostoresystem.paymentmethods.domain.entity.PaymentMethods;
 import com.electrostoresystem.paymentmethods.domain.service.PaymentMethodsService;
 import com.electrostoresystem.paymentmethods.infrastructure.PaymentMethodsRepository;
-import com.electrostoresystem.paymentmethods.infrastructure.paymentmethodsui.FindPaymentMethodsByIdUi;
 import com.electrostoresystem.supplier.application.FindSupplierByIdUseCase;
 import com.electrostoresystem.supplier.domain.entity.Supplier;
 import com.electrostoresystem.supplier.domain.service.SupplierService;
@@ -138,34 +135,33 @@ public class DeleteOrderUi extends JFrame {
         PaymentMethodsService PaymentMethodsService = new PaymentMethodsRepository();
         FindPaymentMethodsByIdUseCase  findPaymentMethodsByIdUseCase = new FindPaymentMethodsByIdUseCase(PaymentMethodsService);
 
+        DeleteOrderDetailsByOrderIdUseCase  deleteOrderDetailsByOrderIdUseCase = new DeleteOrderDetailsByOrderIdUseCase(new OrderDetailRepository());
+
         int orderCode = (Integer.parseInt(textBeforeDot(orderOptions.getSelectedItem().toString())));
         Order deletedOrder = deleteOrderUseCase.execute(orderCode);
+        deleteOrderDetailsByOrderIdUseCase.execute(orderCode);
 
         Optional<OrderStatus> foundOrderStatus = findOrderStatusByIdUseCase.execute(deletedOrder.getStatusId());
         Optional<PaymentMethods> foundPaymentMethods = findPaymentMethodsByIdUseCase.execute(deletedOrder.getPayMethod());
 
         reloadComboBoxOptions();
 
-        if (deletedOrder != null) {
-            String message = String.format(
-                "Order deleted successfully:\n\n" +
-                "Id: %s\n" +
-                "Order Date: %s\n"+
-                "Supplier Id: %s \n"+
-                "Status: %s\n"+
-                "Payment Method: %s \n"+
-                "Total: %.2f \n",
-                deletedOrder.getId(),
-                deletedOrder.getDate(),
-                deletedOrder.getSupplierId(),
-                foundOrderStatus.get().getName(),
-                foundPaymentMethods.get().getName(),
-                deletedOrder.getTotal()
-            );
-            resultArea.setText(message);
-        } else {
-            resultArea.setText("Order not found or deletion failed.");
-        }
+        String message = String.format(
+            "Order deleted successfully:\n\n" +
+            "Id: %s\n" +
+            "Order Date: %s\n"+
+            "Supplier Id: %s \n"+
+            "Status: %s\n"+
+            "Payment Method: %s \n"+
+            "Total: %.2f \n",
+            deletedOrder.getId(),
+            deletedOrder.getDate(),
+            deletedOrder.getSupplierId(),
+            foundOrderStatus.get().getName(),
+            foundPaymentMethods.get().getName(),
+            deletedOrder.getTotal()
+        );
+        resultArea.setText(message);
     }
     private void reloadComboBoxOptions() {
         orderOptions.removeAllItems();

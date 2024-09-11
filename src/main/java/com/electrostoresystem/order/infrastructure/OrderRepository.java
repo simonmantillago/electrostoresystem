@@ -167,5 +167,29 @@ public class OrderRepository implements OrderService {
         
         return orders;
     }
+    @Override
+    public Order findLastOrder() {
+        String query = "SELECT id, order_date, supplier_id, status_id, payment_method, total FROM orders ORDER BY id DESC LIMIT 1";
+        Order order = null;
+    
+        try (PreparedStatement ps = connection.prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+             
+            if (rs.next()) {
+                order = new Order(
+                    rs.getInt("id"),
+                    rs.getString("order_date"),
+                    rs.getString("supplier_id"),
+                    rs.getInt("status_id"),
+                    rs.getInt("payment_method"),
+                    rs.getFloat("total")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    
+        return order;
+    }
 
 }

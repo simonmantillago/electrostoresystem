@@ -47,6 +47,8 @@ public class SaleRepository implements SaleService {
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("sale added successfully!");
+                JOptionPane.showMessageDialog(null, "Sale Created!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
             } else {
                 System.out.println("sale addition failed!");
             }
@@ -176,6 +178,34 @@ public class SaleRepository implements SaleService {
         }
         
         return sales;
+    }
+
+    @Override
+    public Sale findLastSale() {
+        String query = "SELECT id, sale_date, client_id, total, payment_method, discount_amount, discount_percent, status_id FROM sales ORDER BY id DESC LIMIT 1";
+        Sale sale = null;
+    
+        try (PreparedStatement ps = connection.prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+             
+            if (rs.next()) {
+                sale = new Sale(
+                    rs.getInt("id"),
+                    rs.getString("sale_date"),
+                    rs.getString("client_id"),
+                    rs.getFloat("total"),
+                    rs.getInt("payment_method"),
+                    rs.getFloat("discount_amount"),
+                    rs.getFloat("discount_percent"),
+                    rs.getInt("status_id")
+                );
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    
+        return sale;
     }
 
 }

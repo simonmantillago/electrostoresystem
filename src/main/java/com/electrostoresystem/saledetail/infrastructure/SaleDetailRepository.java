@@ -47,18 +47,16 @@ public class SaleDetailRepository implements SaleDetailService {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null,"Not enough stock, or Product not Registered" );
         }
     }
 
     @Override
     public void updateSaleDetail(SaleDetail saleDetail) {
-        String query = "UPDATE sales_details SET sale_id = ?, product_id = ?, quantity = ?, unit_price = ?,subtotal = ? WHERE id = ?";
+        String query = "UPDATE sales_details SET quantity = ? WHERE id = ?";
         try(PreparedStatement ps = connection.prepareStatement(query)){
-            ps.setInt(1, saleDetail.getSaleId());
-            ps.setInt(2, saleDetail.getProductId());
-            ps.setInt(3, saleDetail.getQuantity());
-            ps.setFloat(4, saleDetail.getUnitPrice());
-            ps.setFloat(5, saleDetail.getSubTotal());
+            ps.setInt(1, saleDetail.getQuantity());
+            ps.setInt(2, saleDetail.getId());
     
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {

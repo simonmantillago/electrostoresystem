@@ -8,7 +8,6 @@ import java.awt.Insets;
 
 import java.util.List;
 
-import javax.print.DocFlavor.INPUT_STREAM;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,20 +21,12 @@ import com.electrostoresystem.saledetail.application.CreateSaleDetailUseCase;
 import com.electrostoresystem.saledetail.domain.entity.SaleDetail;
 
 
-import com.electrostoresystem.paymentmethods.application.FindAllPaymentMethodsUseCase;
-import com.electrostoresystem.paymentmethods.domain.entity.PaymentMethods;
-import com.electrostoresystem.paymentmethods.domain.service.PaymentMethodsService;
-import com.electrostoresystem.paymentmethods.infrastructure.PaymentMethodsRepository;
 
 import com.electrostoresystem.sale.application.FindAllSaleUseCase;
 import com.electrostoresystem.sale.domain.entity.Sale;
 import com.electrostoresystem.sale.domain.service.SaleService;
 import com.electrostoresystem.sale.infrastructure.SaleRepository;
 
-import com.electrostoresystem.supplier.application.FindAllSupplierUseCase;
-import com.electrostoresystem.supplier.domain.entity.Supplier;
-import com.electrostoresystem.supplier.domain.service.SupplierService;
-import com.electrostoresystem.supplier.infrastructure.SupplierRepository;
 
 
 public class CreateSaleDetailUi extends JFrame {
@@ -44,7 +35,6 @@ public class CreateSaleDetailUi extends JFrame {
 
     private JComboBox<String> saleBox;
     private JTextField productIdTxt, quantityTxt;
-    private JButton jButton1; // Reset
     private JButton jButton2; // Save
     private JButton jButton3; // Go back
 
@@ -72,14 +62,14 @@ public class CreateSaleDetailUi extends JFrame {
         FindAllSaleUseCase  findAllSaleUseCase = new FindAllSaleUseCase(saleService);
         List<Sale> sales = findAllSaleUseCase.execute();
         for (Sale sale : sales){
-            saleBox.addItem(sale.getId() + ". " + sale.getClientId() + " " + sale.getDate());
+            saleBox.addItem(sale.getId() + ". Client Id: " + sale.getClientId() + " / " + sale.getDate());
         }
 
         productIdTxt = new JTextField();
         quantityTxt = new JTextField();
         
 
-        
+      
         jButton2 = new JButton("Add Product");
         jButton3 = new JButton("Go back");
 
@@ -90,10 +80,10 @@ public class CreateSaleDetailUi extends JFrame {
             saleDetailUiController.showCrudOptions(); // Adjusted to call the method in SaleDetailUiController
         });
 
-        // Layout
+        
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // Increased spacing between components
+        gbc.insets = new Insets(10, 10, 10, 10); 
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         addComponent(jLabel1, 0, 0, 2);
@@ -139,11 +129,17 @@ public class CreateSaleDetailUi extends JFrame {
             saleDetail.setQuantity(Integer.parseInt(quantityTxt.getText()));
 
             createSaleDetailUseCase.execute(saleDetail); 
-            JOptionPane.showMessageDialog(this, "Sale Detail added successfully!");
+            resetFields();
+      
            
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private void resetFields(){
+        productIdTxt.setText("");
+        quantityTxt.setText("");
     }
 
     private String textBeforeDot(String text) {

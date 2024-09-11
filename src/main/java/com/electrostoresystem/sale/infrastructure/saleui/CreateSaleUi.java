@@ -144,7 +144,6 @@ public class CreateSaleUi extends JFrame {
     
 
             createSaleUseCase.execute(sale); 
-            JOptionPane.showMessageDialog(this, "Sale added successfully!");
            
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
