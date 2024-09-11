@@ -29,7 +29,6 @@ import com.electrostoresystem.report.infrastructure.reportui.PrintOrderReceiptUi
 import com.electrostoresystem.order.domain.entity.Order;
 import com.electrostoresystem.order.application.CreateOrderUseCase;
 import com.electrostoresystem.order.application.FindLastOrderUseCase;
-import com.electrostoresystem.order.domain.entity.Order;
 import com.electrostoresystem.order.infrastructure.OrderRepository;
 import com.electrostoresystem.orderdetail.application.CreateOrderDetailUseCase;
 import com.electrostoresystem.orderdetail.domain.entity.OrderDetail;

@@ -214,7 +214,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE TRIGGER update_saledetail_subtotal
+CREATE TRIGGER updateSaledetailSubtotal
 BEFORE UPDATE ON sales_details
 FOR EACH ROW
 BEGIN
@@ -240,13 +240,12 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE TRIGGER after_delete_sales_detail
+CREATE TRIGGER afterDeleteSalesDetail
 AFTER DELETE ON sales_details
 FOR EACH ROW
 BEGIN
     DECLARE v_total DECIMAL(10,2);
     
-    -- Restar el subtotal del detalle de venta eliminado al total de la venta relacionada
     SELECT total INTO v_total
     FROM sales
     WHERE id = OLD.sale_id;
@@ -255,7 +254,6 @@ BEGIN
     SET total = v_total - OLD.subtotal
     WHERE id = OLD.sale_id;
 
-    -- Sumar la cantidad eliminada al stock del producto relacionado
     UPDATE products
     SET stock = stock + OLD.quantity
     WHERE id = OLD.product_id;
@@ -346,13 +344,12 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE TRIGGER after_delete_order_detail
+CREATE TRIGGER afterDeleteOrderDetail
 AFTER DELETE ON order_details
 FOR EACH ROW
 BEGIN
     DECLARE v_total DECIMAL(10,2);
     
-    -- Restar el subtotal del detalle de orden eliminado al total de la orden relacionada
     SELECT total INTO v_total
     FROM orders
     WHERE id = OLD.order_id;
@@ -361,7 +358,6 @@ BEGIN
     SET total = v_total - OLD.subtotal
     WHERE id = OLD.order_id;
 
-    -- Restar la cantidad eliminada del stock del producto relacionado
     UPDATE products
     SET stock = stock - OLD.quantity
     WHERE id = OLD.product_id;
